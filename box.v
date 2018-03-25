@@ -1,7 +1,7 @@
 module box(data, enable, reset, clock, value);
 	input enable, clock, reset;
 	input [3:0] data;
-	output [3:0] value;
+	output reg [3:0] value;
 	
 	always @(posedge clock or posedge reset)
 	begin

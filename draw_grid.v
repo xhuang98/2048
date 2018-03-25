@@ -1,13 +1,33 @@
 module draw_grid(reset, clock, values, x, y, colour);
 	input [16*4 - 1: 0] values; // all values in order
 	input clock, reset;
-	output reg [6:0] x, y; // x: 57-123; y: 27-93.
-	output reg [2:0] colour; // white (111) for numbers, red (100) for box
-	wire reg [3:0] boxcount, xcount, ycount;
-	wire clock_box;
-	wire reg [4:0] value;
+	output [6:0] x, y; // x: 57-123; y: 27-93.
+	output [2:0] colour; // white (111) for numbers, red (100) for box
+	wire [3:0] boxcount, xcount, ycount;
+	reg clock_box;
+	reg [4:0] value;
 	
-	assign value = values[(boxcount + 1) * 4: boxcount * 4];
+	always @(*)
+	begin
+		case(boxcount)
+		4'b0000: value <= values[(4'b0000 + 1'b1) * 1'd4: 4'b0000 * 1'd4];
+		4'b0001: value <= values[(4'b0001 + 1'b1) * 1'd4: 4'b0001 * 1'd4];
+		4'b0010: value <= values[(4'b0010 + 1'b1) * 1'd4: 4'b0010 * 1'd4];
+		4'b0011: value <= values[(4'b0011 + 1'b1) * 1'd4: 4'b0011 * 1'd4];
+		4'b0100: value <= values[(4'b0100 + 1'b1) * 1'd4: 4'b0100 * 1'd4];
+		4'b0101: value <= values[(4'b0101 + 1'b1) * 1'd4: 4'b0101 * 1'd4];
+		4'b0110: value <= values[(4'b0110 + 1'b1) * 1'd4: 4'b0110 * 1'd4];
+		4'b0111: value <= values[(4'b0111 + 1'b1) * 1'd4: 4'b0111 * 1'd4];
+		4'b1000: value <= values[(4'b1000 + 1'b1) * 1'd4: 4'b1000 * 1'd4];
+		4'b1001: value <= values[(4'b1001 + 1'b1) * 1'd4: 4'b1001 * 1'd4];
+		4'b1010: value <= values[(4'b1010 + 1'b1) * 1'd4: 4'b1010 * 1'd4];
+		4'b1011: value <= values[(4'b1011 + 1'b1) * 1'd4: 4'b1011 * 1'd4];
+		4'b1100: value <= values[(4'b1100 + 1'b1) * 1'd4: 4'b1100 * 1'd4];
+		4'b1101: value <= values[(4'b1101 + 1'b1) * 1'd4: 4'b1101 * 1'd4];
+		4'b1110: value <= values[(4'b1110 + 1'b1) * 1'd4: 4'b1110 * 1'd4];
+		4'b1111: value <= values[(4'b1111 + 1'b1) * 1'd4: 4'b1111 * 1'd4];
+		endcase
+	end
 	
 	//counterBox counts from 0 to 15
 	counterBox c0(clock_box, reset, 1'b1, boxcount);
@@ -35,7 +55,7 @@ module counterX(clock, reset, enable, q);
 		
 		always @(posedge clock)
 		begin
-			if(reset_n == 1'b1)
+			if(reset == 1'b1)
 				q <= 4'b0000;
 			else if(enable == 1'b1)
 			begin
@@ -97,7 +117,6 @@ module analyze(value, xcount, ycount, boxcount, X, Y, colour);
 	// assigning colour to each box
 	begin
 		case(value)
-		begin
 			4'b0000: 
 				colour <= 3'b100;
 			4'b0001:
@@ -108,7 +127,7 @@ module analyze(value, xcount, ycount, boxcount, X, Y, colour);
 					colour <= 3'b100;
 			4'b0010:
 				if((xcount == 2'd10 && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8 || ycount == 1'd9 || ycount == 2'd10)) || 
-					(xcount == 1'd7 && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8)) || ((xcount == 1'd8 || xcount == 1'd9) && ycount == 1'd8
+					(xcount == 1'd7 && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8)) || ((xcount == 1'd8 || xcount == 1'd9) && ycount == 1'd8))
 					colour <= 3'b111;
 				else
 					colour <= 3'b100;
@@ -120,7 +139,7 @@ module analyze(value, xcount, ycount, boxcount, X, Y, colour);
 					colour <= 3'b100;
 			4'b0100:
 				if(((xcount == 1'd7 || xcount == 1'd9) && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8 || ycount == 1'd9 || ycount == 2'd10)) || 
-					(xcount == 2'10 && (ycount == 1'd6 || ycount == 1'd8 || ycount == 2'd10)) || 
+					(xcount == 2'd10 && (ycount == 1'd6 || ycount == 1'd8 || ycount == 2'd10)) || 
 					(xcount == 2'd11 && (ycount == 1'd6 || ycount == 1'd8 || ycount == 1'd9 || ycount == 2'd10)))
 					colour <= 3'b111;
 				else
@@ -168,7 +187,7 @@ module analyze(value, xcount, ycount, boxcount, X, Y, colour);
 					colour <= 3'b100;
 			4'b1010:
 				if(((xcount == 1'd2 || xcount == 1'd4 || xcount == 1'd6 || xcount == 2'd14) && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8 || ycount == 1'd9 || ycount == 2'd10)) || 
-					(xcount == 1'd5 && (ycount == 1'6 || ycount == 2'10)) || (xcount == 1'd8 && (ycount == 1'd6 || ycount == 1'd8 || ycount == 1'd9 || ycount == 2'd10)) ||
+					(xcount == 1'd5 && (ycount == 1'd6 || ycount == 2'd10)) || (xcount == 1'd8 && (ycount == 1'd6 || ycount == 1'd8 || ycount == 1'd9 || ycount == 2'd10)) ||
 					(xcount == 1'd9 && (ycount == 1'd6 || ycount == 1'd8 || ycount == 2'd10)) || (xcount == 2'd10 && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8 || ycount == 2'd10)) ||
 					(xcount == 2'd12 && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8)) || (xcount == 2'd13 && ycount == 1'd8))
 					colour <= 3'b111;
@@ -179,60 +198,94 @@ module analyze(value, xcount, ycount, boxcount, X, Y, colour);
 					(xcount == 1'd3 && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8 || ycount == 2'd10)) ||
 					((xcount == 1'd5 || xcount == 1'd7 || xcount == 2'd11 || xcount == 2'd13 || xcount == 2'd15) && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8 || ycount == 1'd9 || ycount == 2'd10)) ||
 					(xcount == 1'd9 && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8)) || (xcount == 2'd10 && ycount == 1'd8))
+					colour <= 3'b111;
+				else
+					colour <= 3'b100;
 			default: 
 				colour <= 3'b110; // error
 		endcase
 	
 		case(boxcount)
-		begin
 			4'b0000:
-				X <= xcount + 57;
-				Y <= ycount + 27;
+			begin
+				X <= xcount + 2'd57;
+				Y <= ycount + 2'd27;
+			end
 			4'b0001:
-				X <= xcount + 74;
-				Y <= ycount + 27;
+			begin
+				X <= xcount + 2'd74;
+				Y <= ycount + 2'd27;
+			end
 			4'b0010:
-				X <= xcount + 91;
-				Y <= ycount + 27;
+			begin
+				X <= xcount + 2'd91;
+				Y <= ycount + 2'd27;
+			end
 			4'b0011:
-				X <= xcount + 108;
-				Y <= ycount + 27;
+			begin	
+				X <= xcount + 3'd108;
+				Y <= ycount + 2'd27;
+			end
 			4'b0100:
-				X <= xcount + 57;
-				Y <= ycount + 44;
+			begin	
+				X <= xcount + 2'd57;
+				Y <= ycount + 2'd44;
+			end
 			4'b0101:
-				X <= xcount + 74;
-				Y <= ycount + 44;
+			begin	
+				X <= xcount + 2'd74;
+				Y <= ycount + 2'd44;
+			end
 			4'b0110:
-				X <= xcount + 91;
-				Y <= ycount + 44;
+			begin	
+				X <= xcount + 2'd91;
+				Y <= ycount + 2'd44;
+			end
 			4'b0111:
-				X <= xcount + 108;
-				Y <= ycount + 44;
+			begin
+				X <= xcount + 3'd108;
+				Y <= ycount + 2'd44;
+			end
 			4'b1000:
-				X <= xcount + 57;
-				Y <= ycount + 61;
+			begin	
+				X <= xcount + 2'd57;
+				Y <= ycount + 2'd61;
+			end
 			4'b1001:
-				X <= xcount + 74;
-				Y <= ycount + 61;
+			begin	
+				X <= xcount + 2'd74;
+				Y <= ycount + 2'd61;
+			end
 			4'b1010:
-				X <= xcount + 91;
-				Y <= ycount + 61;
+			begin	
+				X <= xcount + 2'd91;
+				Y <= ycount + 2'd61;
+			end
 			4'b1011:
-				X <= xcount + 108;
-				Y <= ycount + 61;
+			begin	
+				X <= xcount + 3'd108;
+				Y <= ycount + 2'd61;
+			end
 			4'b1100:
-				X <= xcount + 57;
-				Y <= ycount + 78;
+			begin	
+				X <= xcount + 2'd57;
+				Y <= ycount + 2'd78;
+			end
 			4'b1101:
-				X <= xcount + 74;
-				Y <= ycount + 78;
+			begin	
+				X <= xcount + 2'd74;
+				Y <= ycount + 2'd78;
+			end
 			4'b1110:
-				X <= xcount + 91;
-				Y <= ycount + 78;
+			begin	
+				X <= xcount + 2'd91;
+				Y <= ycount + 2'd78;
+			end
 			4'b1111:
-				X <= xcount + 108;
-				Y <= ycount + 78;
+			begin
+				X <= xcount + 3'd108;
+				Y <= ycount + 2'd78;
+			end
 		endcase
 	end
 endmodule
