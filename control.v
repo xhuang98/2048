@@ -3,5 +3,6 @@ module control(start, clock, up, down, right, left, update, values);
 	output update; // is the enable for the boxes to load new values
 	output [16 * 4 : 0] values; //new values for all boxes
 	
-	
+	// TODO: Different states
+	// TODO: actions according to states
 endmodule
