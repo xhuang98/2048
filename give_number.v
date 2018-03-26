@@ -2,7 +2,7 @@ module give_number (ctrl, CLOCK_50,stop, box1, box2, box3,box4,box5,box6,box7,bo
 	input [3:0] box1, box2, box3,box4,box5,box6,box7,box8,box9,box10,box11,box12,box13,box14, box15, box16;
 	input CLOCK_50;
 	input stop;
-	input [2:0] ctrl;
+	input [2:0] ctrl; // ctrl[1] is reset, ctrl[2] is enable
 	wire random_select;
 	wire other_select;
 	wire [3:0] other_file;
