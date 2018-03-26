@@ -1,7 +1,6 @@
-module give_number (ctrl, CLOCK_50,stop, box1, box2, box3,box4,box5,box6,box7,box8,box9,box10,box11,box12,box13,box14, box15, box16, boxe1, boxe2, boxe3,boxe4,boxe5,boxe6,boxe7,boxe8,boxe9,boxe10,boxe11,boxe12,boxe13,boxe14, boxe15, boxe16);
+module give_number (ctrl, clock, box1, box2, box3,box4,box5,box6,box7,box8,box9,box10,box11,box12,box13,box14, box15, box16, boxe1, boxe2, boxe3,boxe4,boxe5,boxe6,boxe7,boxe8,boxe9,boxe10,boxe11,boxe12,boxe13,boxe14, boxe15, boxe16);
 	input [3:0] box1, box2, box3,box4,box5,box6,box7,box8,box9,box10,box11,box12,box13,box14, box15, box16;
-	input CLOCK_50;
-	input stop;
+	input clock;
 	input [2:0] ctrl; // ctrl[1] is reset, ctrl[2] is enable
 	wire random_select;
 	wire other_select;
@@ -11,13 +10,13 @@ module give_number (ctrl, CLOCK_50,stop, box1, box2, box3,box4,box5,box6,box7,bo
 	reg [63:0] kuta;
 	output [3:0] boxe1, boxe2, boxe3,boxe4,boxe5,boxe6,boxe7,boxe8,boxe9,boxe10,boxe11,boxe12,boxe13,boxe14, boxe15, boxe16;
 	
-	state_mux t1(.ctrl(ctrl), .CLOCK_50(CLOCK_50), .b1(box1), .b2(box2), .b3(box3),.b4(box4),.b5(box5),.b6(box6),.b7(box7),.b8(box8),.b9(box9),
+	state_mux t1(.ctrl(ctrl), .clock(clock), .b1(box1), .b2(box2), .b3(box3),.b4(box4),.b5(box5),.b6(box6),.b7(box7),.b8(box8),.b9(box9),
 	.b10(box10),.b11(box11),.b12(box12),.b13(box13),.b14(box14), .b15(box15), .b16(box16), .new_stated(st1));
 
 	current_state c7(.box1(box1), .box2(box2), .box3(box3),.box4(box4),.box5(box5),.box6(box6),.box7(box7),.box8(box8),.box9(box9),
 	.box10(box10),.box11(box11),.box12(box12),.box13(box13),.box14(box14), .box15(box15), .box16(box16), .wire_out(current_state));
 	 
-	 always@(posedge CLOCK_50)
+	 always@(posedge clock)
 		begin
 			case(ctrl[2])
 				0:begin
@@ -81,9 +80,9 @@ module state_decoder (current_state, box1, box2, box3,box4,box5,box6,box7,box8,b
 	assign box16 = opt16;
 endmodule	
 
-module state_mux(ctrl, CLOCK_50,b1, b2, b3,b4,b5,b6,b7,b8,b9,b10,b11,b12,b13,b14, b15, b16, new_stated);
+module state_mux(ctrl, clock,b1, b2, b3,b4,b5,b6,b7,b8,b9,b10,b11,b12,b13,b14, b15, b16, new_stated);
 	input [3:0] b1, b2, b3,b4,b5,b6,b7,b8,b9,b10,b11,b12,b13,b14, b15, b16;
-	input CLOCK_50; 
+	input clock; 
 	input [2:0] ctrl;
 	wire [3:0] outvalue;
 	wire [1:0] select;
@@ -98,7 +97,7 @@ module state_mux(ctrl, CLOCK_50,b1, b2, b3,b4,b5,b6,b7,b8,b9,b10,b11,b12,b13,b14
 	
 	t_ff T0( //toggle flip flops
 	.enable(ctrl[0]), 
-	.clock(CLOCK_50), 
+	.clock(clock), 
 	.reset(ctrl[1]),
 	.q(outvalue)
 	);	
@@ -120,7 +119,7 @@ module state_mux(ctrl, CLOCK_50,b1, b2, b3,b4,b5,b6,b7,b8,b9,b10,b11,b12,b13,b14
 	
 	assign select = {random_select, other_select};
 	
-	always@(posedge CLOCK_50)
+	always@(posedge clock)
 		begin
 			case(select)
 				0: begin
@@ -438,9 +437,9 @@ module other_checker (box1, box2, box3,box4,box5,box6,box7,box8,box9,box10,box11
 		assign muxy = q;
 endmodule
 
-module variable_counter(ctrl, CLOCK_50, d);
+module variable_counter(ctrl, clock, d);
     input [2:0] ctrl;
-    input CLOCK_50;
+    input clock;
     
     wire enable;
     wire [3:0] outvalue;
@@ -448,11 +447,11 @@ module variable_counter(ctrl, CLOCK_50, d);
     
     t_ff T0( //toggle flip flops
        .enable(ctrl[0]), 
-       .clock(CLOCK_50), 
+       .clock(clock), 
        .reset(ctrl[1]),
        .q(outvalue)
        );
-	always @(posedge CLOCK_50)
+	always @(posedge clock)
 	begin
 		if (ctrl[1] == 1'b1)
 		begin
