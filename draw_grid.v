@@ -1,5 +1,5 @@
 module draw_grid(reset, clock, values, x, y, colour);
-	input [16*4 - 1: 0] values; // all values in order
+	input [16*4 - 1: 0] values; // box1 - box16 all values in order 
 	input clock, reset;
 	output [6:0] x, y; // x: 57-123; y: 27-93.
 	output [2:0] colour; // white (111) for numbers, red (100) for box
