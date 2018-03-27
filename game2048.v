@@ -51,8 +51,7 @@ module game2048(
 	wire [16 * 4 - 1 : 0] oldvalues;
 	wire [3:0] box1in, box2in, box3in, box4in, box5in, box6in, box7in, box8in, box9in, box10in, box11in, box12in, box13in, box14in, box15in, box16in;
 	wire [3:0] box1out, box2out, box3out, box4out, box5out, box6out, box7out, box8out, box9out, box10out, box11out, box12out, box13out, box14out, box15out, box16out;
-	wire enable;
-	wire clock;
+	wire enable, clock, endstatus;
 	reg [6:0] x, y; // x: 57-123; y: 27-93.
 	reg [2:0] colour; // white (111) for numbers, red (100) for box
 	
@@ -79,8 +78,14 @@ module game2048(
 	assign {box1in, box2in, box3in, box4in, box5in, box6in, box7in, box8in, box9in, box10in, box11in, box12in, box13in, box14in, box15in, box16in} = newvalues;
 	assign oldvalues = {box1out, box2out, box3out, box4out, box5out, box6out, box7out, box8out, box9out, box10out, box11out, box12out, box13out, box14out, box15out, box16out};
 		
-	control c0(start, clock, up, down, right, left, oldvalues, enable, newvalues);
+	control c0(start, clock, up, down, right, left, oldvalues, enable, newvalues, endstatus);
 	
-	draw_grid d0(start, clock, oldvalues, x, y, colour);
+	
+	always @(*) // gameplay status
+	if(endstatus == 2'b00)
+		draw_grid d0(start, clock, oldvalues, x, y, colour);
+	else
+		resultdisplay r0(endstatus, x, y, colour);
+	end
 	
 endmodule
