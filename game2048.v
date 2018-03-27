@@ -10,7 +10,7 @@ module game2048(
 		VGA_G,	 						//	VGA Green[9:0]
 		VGA_B   						//	VGA Blue[9:0]
 		);
-	//input: arrow keys, s key (start), clock
+	//input: arrow keys, s key (start)
 	//output: vga stuff
 	input			CLOCK_50;				//	50 MHz
 	output			VGA_CLK;   				//	VGA Clock      
@@ -46,7 +46,7 @@ module game2048(
 	defparam VGA.BACKGROUND_IMAGE = "black.mif";
 	
 	/*=================================================*/
-	
+	reg start;
 	wire [16 * 4 - 1 : 0] newvalues;
 	wire [16 * 4 - 1 : 0] oldvalues;
 	wire [3:0] box1in, box2in, box3in, box4in, box5in, box6in, box7in, box8in, box9in, box10in, box11in, box12in, box13in, box14in, box15in, box16in;
@@ -56,6 +56,7 @@ module game2048(
 	reg [2:0] colour; // white (111) for numbers, red (100) for box
 	
 	assign clock = CLOCK_50;
+	
 	
 	// start is reset
 	box b1(box1in, enable, start, clock, box1out);
@@ -78,14 +79,10 @@ module game2048(
 	assign {box1in, box2in, box3in, box4in, box5in, box6in, box7in, box8in, box9in, box10in, box11in, box12in, box13in, box14in, box15in, box16in} = newvalues;
 	assign oldvalues = {box1out, box2out, box3out, box4out, box5out, box6out, box7out, box8out, box9out, box10out, box11out, box12out, box13out, box14out, box15out, box16out};
 		
-	control c0(start, clock, up, down, right, left, oldvalues, enable, newvalues, endstatus);
+	control c0(start, clock, direction, oldvalues, enable, newvalues, endstatus);
 	
+	draw_grid d0(start, clock, oldvalues, x, y, colour);
 	
-	always @(*) // gameplay status
-	if(endstatus == 2'b00)
-		draw_grid d0(start, clock, oldvalues, x, y, colour);
-	else
-		resultdisplay r0(endstatus, x, y, colour);
-	end
+	resultdisplay r0(endstatus, x, y, colour);
 	
 endmodule
