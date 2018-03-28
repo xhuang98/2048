@@ -36,7 +36,7 @@ module control(start, clock, direction, oldvalues, update, newvalues, endstatus)
 				INIT2 = 3'b001, 
 				WAIT = 3'b011,
 				MOVE = 3'b010,
-				END = 3'b000
+				END = 3'b000;
 	
 	always@(*) // update next state
 	begin
@@ -78,7 +78,7 @@ module control(start, clock, direction, oldvalues, update, newvalues, endstatus)
 		endcase
 	end
 	
-	clockdelay c1(clock, !start, enable, clk);
+	clockdelay c1(clock, ~start, enable, clk);
 	
 	// Update current state
 	always@(posedge clk)
