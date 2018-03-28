@@ -66,14 +66,20 @@ module control(start, clock, direction, oldvalues, update, newvalues, endstatus)
 		case(current_state)
 			//INIT: do nothing?
 			INIT2: 
+				begin
 				enable_givenum = 1'b1;
 				update = 1'b1;
+				end
 			WAIT: 
+				begin
 				enable_givenum = 1'b1;
 				update = 1'b1;
+				end
 			MOVE: 
+				begin
 				enable_move = 1'b1;
 				update = 1'b1;
+				end
 			//END: do nothing?
 		endcase
 	end
