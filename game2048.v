@@ -13,7 +13,7 @@ module game2048(
 		);
 	//input: arrow keys, s key (start)
 	input			CLOCK_50;				//	50 MHz
-	input 	[4:0]	SW;					// SW4 is start/reset, KEY[3:0] is direction (up, down, left, right)
+	input 	[4:0]	SW;					// SW4 is start/reset, SW[3:0] is direction (up, down, left, right)
 
 	//output: vga stuff:
 	output			VGA_CLK;   				//	VGA Clock      
@@ -63,9 +63,9 @@ module game2048(
 	
 	assign clock = CLOCK_50;
 	// TODO: Assign keyboard to start
-	assign start = KEY[4];
+	assign start = SW[4];
 	// TODO: Assign keyboard values to direction
-	assign direction = KEY[3:0];
+	assign direction = SW[3:0];
 	
 	// start is reset
 	box b1(box1in, enable, start, clock, box1out);
