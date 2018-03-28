@@ -6,6 +6,7 @@ module draw_grid(reset, clock, values, x, y, colour);
 	wire [3:0] boxcount, xcount, ycount;
 	reg clock_box;
 	reg [4:0] value;
+	reg clock_y;
 	
 	always @(*)
 	begin
@@ -39,10 +40,18 @@ module draw_grid(reset, clock, values, x, y, colour);
 			clock_box <= 1'b0;
 	end
 	
+	always@(*)
+	begin
+		if(xcount == 2'd14)
+			clock_y = 1'b1;
+		else
+			clock_y = 1'b0;
+	end
+	
 	//counterX counts from 0 to 14
 	counterX c1(clock, reset, 1'b1, xcount);
 	//counterY counts from 0 to 14
-	counterY c2(clock, reset, 1'b1, ycount);
+	counterY c2(clock_y, reset, 1'b1, ycount);
 
 	analyze a0(value, xcount, ycount, boxcount, x, y, colour);
 endmodule
@@ -204,87 +213,90 @@ module analyze(value, xcount, ycount, boxcount, X, Y, colour);
 			default: 
 				colour <= 3'b110; // error
 		endcase
+	end
 	
+	always@(*)
+	begin
 		case(boxcount)
 			4'b0000:
 			begin
-				X <= xcount + 2'd57;
-				Y <= ycount + 2'd27;
+				X <= xcount + 6'b111001;
+				Y <= ycount + 5'b11011;
 			end
 			4'b0001:
 			begin
-				X <= xcount + 2'd74;
-				Y <= ycount + 2'd27;
+				X <= xcount + 7'b1001010;
+				Y <= ycount + 5'b11011;
 			end
 			4'b0010:
 			begin
-				X <= xcount + 2'd91;
-				Y <= ycount + 2'd27;
+				X <= xcount + 7'b1011011;
+				Y <= ycount + 5'b11011;
 			end
 			4'b0011:
 			begin	
-				X <= xcount + 3'd108;
-				Y <= ycount + 2'd27;
+				X <= xcount + 7'b1101100;
+				Y <= ycount + 5'b11011;
 			end
 			4'b0100:
 			begin	
-				X <= xcount + 2'd57;
-				Y <= ycount + 2'd44;
+				X <= xcount + 6'b111001;
+				Y <= ycount + 6'b101100;
 			end
 			4'b0101:
 			begin	
-				X <= xcount + 2'd74;
-				Y <= ycount + 2'd44;
+				X <= xcount + 7'b1001010;
+				Y <= ycount + 6'b101100;
 			end
 			4'b0110:
 			begin	
-				X <= xcount + 2'd91;
-				Y <= ycount + 2'd44;
+				X <= xcount + 7'b1011011;
+				Y <= ycount + 6'b101100;
 			end
 			4'b0111:
 			begin
-				X <= xcount + 3'd108;
-				Y <= ycount + 2'd44;
+				X <= xcount + 7'b1101100;
+				Y <= ycount + 6'b101100;
 			end
 			4'b1000:
 			begin	
-				X <= xcount + 2'd57;
-				Y <= ycount + 2'd61;
+				X <= xcount + 6'b111001;
+				Y <= ycount + 6'b111101;
 			end
 			4'b1001:
 			begin	
-				X <= xcount + 2'd74;
-				Y <= ycount + 2'd61;
+				X <= xcount + 7'b1001010;
+				Y <= ycount + 6'b111101;
 			end
 			4'b1010:
 			begin	
-				X <= xcount + 2'd91;
-				Y <= ycount + 2'd61;
+				X <= xcount + 7'b1011011;
+				Y <= ycount + 6'b111101;
 			end
 			4'b1011:
 			begin	
-				X <= xcount + 3'd108;
-				Y <= ycount + 2'd61;
+				X <= xcount + 7'b1101100;
+				Y <= ycount + 6'b111101;
 			end
 			4'b1100:
 			begin	
-				X <= xcount + 2'd57;
-				Y <= ycount + 2'd78;
+				X <= xcount + 6'b111001;
+				Y <= ycount + 7'b1001110;
 			end
 			4'b1101:
 			begin	
-				X <= xcount + 2'd74;
-				Y <= ycount + 2'd78;
+				X <= xcount + 7'b1001010;
+				Y <= ycount + 7'b1001110;
 			end
 			4'b1110:
 			begin	
-				X <= xcount + 2'd91;
-				Y <= ycount + 2'd78;
+				X <= xcount + 7'b1011011;
+				Y <= ycount + 7'b1001110;
 			end
 			4'b1111:
 			begin
-				X <= xcount + 3'd108;
-				Y <= ycount + 2'd78;
+				X <= xcount + 7'b1101100;
+				Y <= ycount + 7'b1001110;
 			end
 		endcase
 	end
