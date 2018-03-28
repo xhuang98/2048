@@ -1,269 +1,169 @@
-module state_final (mux_ind,CONTROL, CLOCK_50, MAIN_CLOCK, SQ1, SQ2,SQ3,SQ4,SQ5,SQ6,SQ7,SQ8,SQ9,SQ10,SQ11,SQ12,SQ13,SQ14,SQ15,SQ16, NSQ1,NSQ2,NSQ3,NSQ4,NSQ5,NSQ6,NSQ7,NSQ8,NSQ9,NSQ10,NSQ11,NSQ12,NSQ13,NSQ14,NSQ15,NSQ16);
+module state_final (CLOCK_IN, randomnumber_generated,CONTROL, SQ1, SQ2,SQ3,SQ4,SQ5,SQ6,SQ7,SQ8,SQ9,SQ10,SQ11,SQ12,SQ13,SQ14,SQ15,SQ16, NSQ1,NSQ2,NSQ3,NSQ4,NSQ5,NSQ6,NSQ7,NSQ8,NSQ9,NSQ10,NSQ11,NSQ12,NSQ13,NSQ14,NSQ15,NSQ16, mux_ind);
 	input [3:0] SQ1, SQ2,SQ3,SQ4,SQ5,SQ6,SQ7,SQ8,SQ9,SQ10,SQ11,SQ12,SQ13,SQ14,SQ15,SQ16;
 	wire [3:0] S1,S2,S3,S4,S5,S6,S7,S8,S9,S10,S11,S12,S13,S14,S15,S16;
+	reg [3:0] onu1, onu2, onu3, onu4, onu5, onu6, onu7, onu8, onu9, onu10, onu11, onu12, onu13, onu14, onu15, onu16;
 	output [3:0] NSQ1,NSQ2,NSQ3,NSQ4,NSQ5,NSQ6,NSQ7,NSQ8,NSQ9,NSQ10,NSQ11,NSQ12,NSQ13,NSQ14,NSQ15,NSQ16;
-	input [3:0] CONTROL;
-	input CLOCK_50;
-	input MAIN_CLOCK;
+	input CONTROL;
+	input [3:0] randomnumber_generated;
 	output [1:0] mux_ind;
-	
-	// CONTROL[0] IS ENABLE SIGNAL FOR THE RANDOM COUNTER
-	// CONTROL[1] IS RESET SIGNAL FOR THE RANDOM COUNTER
-	// CONTROL[2] IS THE RESET SIGNAL FOR ALL OTHER REGISTERS
-	// CONTROL[3] IS THE SIGNAL TO PROCEED WITH A NEW TILE PLACEMENT, AKA TO EITHER KEEP THE CURRENT STATE OR IF TO NOT KEEP THE STATE
-	// HERE IS THE BREAKDOWN
-	// CONTROL0123
-	// 		0000 CURRENT_STATE REMAINS THE SAME
-	// 		0001 IF CONTROL[2] IS ZERO THEN THE RANDOM COUNTER IS SET TO ZERO AND THE   
-	// 		0010 CURRENT_STATE REMAINS THE SAME
-	// 		0011 LOAD NEW_STATE INTO RANDOM AND OTHER
-	// 		0100 CURRENT_STATE REMAINS THE SAME
-	// 		0101
-	// 		0110 CURRENT_STATE REMAINS THE SAME
-	// 		0111 
-	// 		1000 CURRENT_STATE REMAINS THE SAME
-	// 		1001
-	// 		1010 CURRENT_STATE REMAINS THE SAME
-	// 		1011 
-	// 		1100 CURRENT_STATE REMAINS THE SAME
-	// 		1101
-	// 		1110 CURRENT_STATE REMAINS THE SAME
-	// 		1111 
-	state_below statbel(.ctl(CONTROL[2:0]), .CLOCKTR(CLOCK_50), .clocke(MAIN_CLOCK), .bar1(SQ1), .bar2(SQ2),.bar3(SQ3),.bar4(SQ4),
-	.bar5(SQ5),.bar6(SQ6),.bar7(SQ7),.bar8(SQ8),.bar9(SQ9),.bar10(SQ10),.bar11(SQ11),.bar12(SQ12),.bar13(SQ13),.bar14(SQ14),.bar15(SQ15),
-	.bar16(SQ16),.bart1(S1), .bart2(S2),.bart3(S3),.bart4(S4),.bart5(S5),.bart6(S6),
-	.bart7(S7),.bart8(S8),.bart9(S9),.bart10(S10),.bart11(S11),.bart12(S12),.bart13(S13),.bart14(S14),.bart15(S15),.bart16(S16), .select(mux_ind));
-	
-	 T_FF T21(
-	  .t(NSQ1),
-	  .t2(S1),
-	  .clock(MAIN_CLOCK), 
-	  .reset(CONTROL[3]), 
-	  .q(NSQ1)
-	  );
-	 T_FF T22(
-	  .t(NSQ2),
-	  .t2(S2),
-	  .clock(MAIN_CLOCK), 
-	  .reset(CONTROL[3]), 
-	  .q(NSQ2)
-	  );
-	 T_FF T31(
-	  .t(NSQ3),
-	  .t2(S3),
-	  .clock(MAIN_CLOCK), 
-	  .reset(CONTROL[3]), 
-	  .q(NSQ3)
-	  );
-	 T_FF T41(
-	  .t(NSQ4),
-	  .t2(S4),
-	  .clock(MAIN_CLOCK), 
-	  .reset(CONTROL[3]), 
-	  .q(NSQ4)
-	  );
-	 T_FF T51(
-	  .t(NSQ5),
-	  .t2(S5),
-	  .clock(MAIN_CLOCK), 
-	  .reset(CONTROL[3]), 
-	  .q(NSQ5)
-	  );
-	 T_FF T61(
-	  .t(NSQ6),
-	  .t2(S6),
-	  .clock(MAIN_CLOCK), 
-	  .reset(CONTROL[3]), 
-	  .q(NSQ6)
-	  );
-	 T_FF T81(
-	  .t(NSQ8),
-	  .t2(S8),
-	  .clock(MAIN_CLOCK), 
-	  .reset(CONTROL[3]), 
-	  .q(NSQ8)
-	  );
-	 T_FF T71(
-	  .t(NSQ7),
-	  .t2(S7),
-	  .clock(MAIN_CLOCK), 
-	  .reset(CONTROL[3]), 
-	  .q(NSQ7)
-	  );
-	 T_FF T91(
-	  .t(NSQ9),
-	  .t2(S9),
-	  .clock(MAIN_CLOCK), 
-	  .reset(CONTROL[3]), 
-	  .q(NSQ9)
-	  );
-	 T_FF T101(
-	  .t(NSQ10),
-	  .t2(S10),
-	  .clock(MAIN_CLOCK), 
-	  .reset(CONTROL[3]), 
-	  .q(NSQ10)
-	  );
-	 T_FF T111(
-	  .t(NSQ11),
-	  .t2(S11),
-	  .clock(MAIN_CLOCK), 
-	  .reset(CONTROL[3]), 
-	  .q(NSQ11)
-	  );
-	 T_FF T121(
-	  .t(NSQ12),
-	  .t2(S12),
-	  .clock(MAIN_CLOCK), 
-	  .reset(CONTROL[3]), 
-	  .q(NSQ12)
-	  );
-	 T_FF T131(
-	  .t(NSQ13),
-	  .t2(S13),
-	  .clock(MAIN_CLOCK), 
-	  .reset(CONTROL[3]), 
-	  .q(NSQ13)
-	  );
-	 T_FF T141(
-	  .t(NSQ14),
-	  .t2(S14),
-	  .clock(MAIN_CLOCK), 
-	  .reset(CONTROL[3]), 
-	  .q(NSQ14)
-	  );
-	 T_FF T151(
-	  .t(NSQ15),
-	  .t2(S15),
-	  .clock(MAIN_CLOCK), 
-	  .reset(CONTROL[3]), 
-	  .q(NSQ15)
-	  );
-	 T_FF T161(
-	  .t(NSQ16),
-	  .t2(S16),
-	  .clock(MAIN_CLOCK), 
-	  .reset(CONTROL[3]), 
-	  .q(NSQ16)
-	  );		
-endmodule	
-	
+	input CLOCK_IN;
+	state_below statbel(.outvalue(randomnumber_generated), .b1(SQ1), .b2(SQ2),.b3(SQ3),.b4(SQ4),
+	.b5(SQ5),.b6(SQ6),.b7(SQ7),.b8(SQ8),.b9(SQ9),.b10(SQ10),.b11(SQ11),.b12(SQ12),.b13(SQ13),.b14(SQ14),.b15(SQ15),
+	.b16(SQ16),.bart1(S1), .bart2(S2),.bart3(S3),.bart4(S4),.bart5(S5),.bart6(S6),
+	.bart7(S7),.bart8(S8),.bart9(S9),.bart10(S10),.bart11(S11),.bart12(S12),.bart13(S13),.bart14(S14),.bart15(S15),.bart16(S16), .select(mux_ind), .clock_inner(CLOCK_IN));
+	always @(posedge CLOCK_IN)
+		begin
+			case(CONTROL)
+				0:begin
+					onu1 <= SQ1;
+					onu2 <= SQ2;
+					onu3 <= SQ3;
+					onu4 <= SQ4;
+					onu5 <= SQ5;
+					onu6 <= SQ6;
+					onu7 <= SQ7;
+					onu8 <= SQ8;
+					onu9 <= SQ9;
+					onu10 <= SQ10;
+					onu11 <= SQ11;
+					onu12 <= SQ12;
+					onu13 <= SQ13;
+					onu14 <= SQ14;
+					onu15 <= SQ15;
+					onu16 <= SQ16;
+					end
+				1:begin
+					onu1 <= S1;
+					onu2 <= S2;
+					onu3 <= S3;
+					onu4 <= S4;
+					onu5 <= S5;
+					onu6 <= S6;
+					onu7 <= S7;
+					onu8 <= S8;
+					onu9 <= S9;
+					onu10 <= S10;
+					onu11 <= S11;
+					onu12 <= S12;
+					onu13 <= S13;
+					onu14 <= S14;
+					onu15 <= S15;
+					onu16 <= S16;
+					end
+				endcase
+		end
+	assign NSQ1= onu1;
+	assign NSQ2 = onu2;
+	assign NSQ3 = onu3;
+	assign NSQ4 = onu4;
+	assign NSQ5 = onu5;
+	assign NSQ6 = onu6;
+	assign NSQ7 = onu7;
+	assign NSQ8= onu8;
+	assign NSQ9= onu9;
+	assign NSQ10= onu10;
+	assign NSQ11= onu11;
+	assign NSQ12= onu12;
+	assign NSQ13= onu13;
+	assign NSQ14= onu14;
+	assign NSQ15= onu15;
+	assign NSQ16= onu16;
+endmodule
 
-module state_below(ctl, CLOCKTR, clocke, bar1, bar2,bar3,bar4,bar5,bar6,bar7,bar8,bar9,bar10,bar11,bar12,bar13,bar14,bar15,bar16,bart1, bart2,bart3,bart4,bart5,bart6,bart7,bart8,bart9,bart10,bart11,bart12,bart13,bart14,bart15,bart16, select);
-	input [3:0] bar1, bar2,bar3,bar4,bar5,bar6,bar7,bar8,bar9,bar10,bar11,bar12,bar13,bar14,bar15,bar16;
-	wire [3:0] ar1, ar2,ar3,ar4,ar5,ar6,ar7,ar8,ar9,ar10,ar11,ar12,ar13,ar14,ar15,ar16;
-	wire [3:0] or1, or2,or3,or4,or5,or6,or7,or8,or9,or10,or11,or12,or13,or14,or15,or16;
+module state_below(clock_inner, outvalue, b1, b2, b3,b4,b5,b6,b7,b8,b9,b10,b11,b12,b13,b14, b15, b16,bart1, bart2,bart3,bart4,bart5,bart6,bart7,bart8,bart9,bart10,bart11,bart12,bart13,bart14,bart15,bart16, select);
+	input [3:0] b1, b2, b3,b4,b5,b6,b7,b8,b9,b10,b11,b12,b13,b14, b15, b16;	
+	wire [3:0] k1, k2, k3,k4,k5,k6,k7,k8,k9,k10,k11,k12,k13,k14, k15, k16;	
+	wire [3:0] kr1, kr2, kr3,kr4,kr5,kr6,kr7,kr8,kr9,kr10,kr11,kr12,kr13,kr14, kr15, kr16;	
+	wire mux_rand;
+	wire mux_other;
+	output [1:0] select;
+	input [3:0] outvalue;
 	reg [3:0] ror1, ror2,ror3,ror4,ror5,ror6,ror7,ror8,ror9,ror10,ror11,ror12,ror13,ror14,ror15,ror16;
 	output [3:0] bart1, bart2,bart3,bart4,bart5,bart6,bart7,bart8,bart9,bart10,bart11,bart12,bart13,bart14,bart15,bart16;
-	input CLOCKTR;
-	input [2:0]ctl;
-	input clocke;
-	wire random_select_mux;
-	wire other_select_mux;
-	wire [3:0] qout;
-	wire [3:0] storedvalueout;
-	output [1:0] select;
-	// count_up is set to zero when ctrl1 is 1
-	//regFF is set to zero when ctrl1 is 1
-	//if ctrl[2] is 0 then maintain the next_state after the random tile placement otherwise if ctrl[2] is 1 then find the next next state
-	// 100 qout = 4'b000
-	// 101
-	// 110
-	// 111
-	count_up v1(.enable(1'B1),.clock(CLOCKTR),.reset(ctl[1]),.q(qout));
-   regFF new0(
-       .t(qout),
-       .clock(clocke), 
-       .reset(ctl[1]), 
-       .q(storedvalueout)
-       );
+	input clock_inner;
 	
-	random_numb rap1(.outvalue(storedvalueout),.clock_inere(clocke), .b1(bar1), .b2(bar2), .b3(bar3),.b4(bar4),.b5(bar5),.b6(bar6),.b7(bar7),
-	.b8(bar8),.b9(bar9),.b10(bar10),.b11(bar11),.b12(bar12),.b13(bar13),.b14(bar14), .b15(bar15), .b16(bar16),
-	.o1(ar1),.o2(ar2),.o3(ar3),.o4(ar4),.o5(ar5),.o6(ar6),.o7(ar7),.o8(ar8),.o9(ar9),.o10(ar10),.o11(ar11),.o12(ar12),.o13(ar13),.o14(ar14),.o15(ar15),.o16(ar16),
-	.real_movemen(ctl[2]), .mux_rand(random_select_mux));
+	random_number_grabber r0(.clock(clock_inner),.randombox(outvalue), .box1(b1), .box2(b2), .box3(b3),.box4(b4),.box5(b5),.box6(b6),.box7(b7),.box8(b8),.box9(b9),
+	.box10(b10),.box11(b11),.box12(b12),.box13(b13),.box14(b14), .box15(b15), .box16(b16),.q1(k1),.q2(k2),.q3(k3),.q4(k4),.q5(k5),.q6(k6),.q7(k7),.q8(k8),.q9(k9),.q10(k10),.q11(k11),.q12(k12),.q13(k13),.q14(k14),.q15(k15),.q16(k16), .muxy(mux_rand));
 	
-	other_numb ark1(.clock_inere(clocke), .b1(bar1), .b2(bar2), .b3(bar3),.b4(bar4),.b5(bar5),.b6(bar6),.b7(bar7),
-	.b8(bar8),.b9(bar9),.b10(bar10),.b11(bar11),.b12(bar12),.b13(bar13),.b14(bar14), .b15(bar15), .b16(bar16),
-	.o1(or1),.o2(or2),.o3(or3),.o4(or4),.o5(or5),.o6(or6),.o7(or7),.o8(or8),.o9(or9),.o10(or10),.o11(or11),.o12(or12),.o13(or13),.o14(or14),.o15(or15),.o16(or16)
-	,.real_movemen(ctl[2]), .mux_other(other_select_mux));
-
+	other_checker r1(.clock(clock_inner),.box1(b1), .box2(b2), .box3(b3),.box4(b4),.box5(b5),.box6(b6),.box7(b7),.box8(b8),.box9(b9),
+	.box10(b10),.box11(b11),.box12(b12),.box13(b13),.box14(b14), .box15(b15), .box16(b16),.boxy1(kr1),.boxy2(kr2),.boxy3(kr3),.boxy4(kr4),.boxy5(kr5),.boxy6(kr6),.boxy7(kr7),.boxy8(kr8),.boxy9(kr9),.boxy10(kr10),.boxy11(kr11),.boxy12(kr12),.boxy13(kr13),.boxy14(kr14),.boxy15(kr15),.boxy16(kr16), .mux_other(mux_other));
 	
-	assign select = {other_select_mux, random_select_mux};
-	always@(*)
+	assign select = {mux_other, mux_rand};
+	
+	always@(posedge clock_inner)
 	begin
 		case(select)
 			0: begin
-				ror1 <= bar1;
-				ror2 <= bar2;
-				ror3 <= bar3;
-				ror4 <= bar4;
-				ror5 <= bar5;
-				ror6 <= bar6;
-				ror7 <= bar7;
-				ror8 <= bar8;
-				ror9 <= bar9;
-				ror10 <= bar10;
-				ror11 <= bar11;
-				ror12 <= bar12;
-				ror13 <= bar13;
-				ror14 <= bar14;
-				ror15 <= bar15;
-				ror16 <= bar16;
+				ror1 <= b1;
+				ror2 <= b2;
+				ror3 <= b3;
+				ror4 <= b4;
+				ror5 <= b5;
+				ror6 <= b6;
+				ror7 <= b7;
+				ror8 <= b8;
+				ror9 <= b9;
+				ror10 <= b10;
+				ror11 <= b11;
+				ror12 <= b12;
+				ror13 <= b13;
+				ror14 <= b14;
+				ror15 <= b15;
+				ror16 <= b16;
 				end
 			1: begin
-				ror1 <= bar1;
-				ror2 <= bar2;
-				ror3 <= bar3;
-				ror4 <= bar4;
-				ror5 <= bar5;
-				ror6 <= bar6;
-				ror7 <= bar7;
-				ror8 <= bar8;
-				ror9 <= bar9;
-				ror10 <= bar10;
-				ror11 <= bar11;
-				ror12 <= bar12;
-				ror13 <= bar13;
-				ror14 <= bar14;
-				ror15 <= bar15;
-				ror16 <= bar16;
+				ror1 <= b1;
+				ror2 <= b2;
+				ror3 <= b3;
+				ror4 <= b4;
+				ror5 <= b5;
+				ror6 <= b6;
+				ror7 <= b7;
+				ror8 <= b8;
+				ror9 <= b9;
+				ror10 <= b10;
+				ror11 <= b11;
+				ror12 <= b12;
+				ror13 <= b13;
+				ror14 <= b14;
+				ror15 <= b15;
+				ror16 <= b16;
 				end
 			2: begin
-				ror1 <= or1;
-				ror2 <= or2;
-				ror3 <= or3;
-				ror4 <= or4;
-				ror5 <= or5;
-				ror6 <= or6;
-				ror7 <= or7;
-				ror8 <= or8;
-				ror9 <= or9;
-				ror10 <= or10;
-				ror11 <= or11;
-				ror12 <= or12;
-				ror13 <= or13;
-				ror14 <= or14;
-				ror15 <= or15;
-				ror16 <= or16;
+				ror1 <= kr1;
+				ror2 <= kr2;
+				ror3 <= kr3;
+				ror4 <= kr4;
+				ror5 <= kr5;
+				ror6 <= kr6;
+				ror7 <= kr7;
+				ror8 <= kr8;
+				ror9 <= kr9;
+				ror10 <= kr10;
+				ror11 <= kr11;
+				ror12 <= kr12;
+				ror13 <= kr13;
+				ror14 <= kr14;
+				ror15 <= kr15;
+				ror16 <= kr16;
 				end
 			3: begin
-				ror1 <= ar1;
-				ror2 <= ar2;
-				ror3 <= ar3;
-				ror4 <= ar4;
-				ror5 <= ar5;
-				ror6 <= ar6;
-				ror7 <= ar7;
-				ror8 <= ar8;
-				ror9 <= ar9;
-				ror10 <= ar10;
-				ror11 <= ar11;
-				ror12 <= ar12;
-				ror13 <= ar13;
-				ror14 <= ar14;
-				ror15 <= ar15;
-				ror16 <= ar16;
+				ror1 <= k1;
+				ror2 <= k2;
+				ror3 <= k3;
+				ror4 <= k4;
+				ror5 <= k5;
+				ror6 <= k6;
+				ror7 <= k7;
+				ror8 <= k8;
+				ror9 <= k9;
+				ror10 <= k10;
+				ror11 <= k11;
+				ror12 <= k12;
+				ror13 <= k13;
+				ror14 <= k14;
+				ror15 <= k15;
+				ror16 <= k16;
 				end
 		endcase
 	end
@@ -283,667 +183,16 @@ module state_below(ctl, CLOCKTR, clocke, bar1, bar2,bar3,bar4,bar5,bar6,bar7,bar
 	assign bart14 = ror14;
 	assign bart15 = ror15;
 	assign bart16 = ror16;
-endmodule
-				
-module regFF(t, clock, reset, q);
-   input [3:0] t;
-	input clock, reset;
-   output reg [3:0] q;
-   always @ (posedge clock)
-   begin
-      if(reset == 1'b1)
-      begin
-         q <= 4'b0000;
-      end
-      else
-      begin
-         q <= t;
-      end
-   end
-endmodule
-
-
-	
-module count_up(enable, clock, reset, q);
-    input enable, clock, reset;
-    output reg [3:0] q;
-	 wire [3:0] ku;
-	 assign ku = 4'b0001;
-    always @(posedge clock)
-    begin
-        if(reset == 1'b1) //reset when high
-        begin
-            q <= 4'b0000;
-        end
-        else if(q > 4'b1111) //when hex display reaches F reset
-            q <= 4'b0000;
-        else if(enable == 1'b1) //counts upwards for hex value
-            q <= q + ku;
-    end
 endmodule	
-
-module other_numb(clock_inere, b1, b2, b3,b4,b5,b6,b7,b8,b9,b10,b11,b12,b13,b14, b15, b16,o1,o2,o3,o4,o5,o6,o7,o8,o9,o10,o11,o12,o13,o14,o15,o16,real_movemen, mux_other);
-	input [3:0] b1, b2, b3,b4,b5,b6,b7,b8,b9,b10,b11,b12,b13,b14, b15, b16;	
-	wire [3:0] k1, k2, k3,k4,k5,k6,k7,k8,k9,k10,k11,k12,k13,k14, k15, k16;	
-	output [3:0] o1,o2,o3,o4,o5,o6,o7,o8,o9,o10,o11,o12,o13,o14,o15,o16;
-	output mux_other;
-	input clock_inere;
-	input real_movemen;
-	other_checker r1(.box1(b1), .box2(b2), .box3(b3),.box4(b4),.box5(b5),.box6(b6),.box7(b7),.box8(b8),.box9(b9),
-	.box10(b10),.box11(b11),.box12(b12),.box13(b13),.box14(b14), .box15(b15), .box16(b16),.boxy1(k1),.boxy2(k2),.boxy3(k3),.boxy4(k4),.boxy5(k5),.boxy6(k6),.boxy7(k7),.boxy8(k8),.boxy9(k9),.boxy10(k10),.boxy11(k11),.boxy12(k12),.boxy13(k13),.boxy14(k14),.boxy15(k15),.boxy16(k16), .mux_other(mux_other), .clock(clock_inere));
 	
-	 T_FF T1(
-	  .t(o1),
-	  .t2(k1),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o1)
-	  );
-	 T_FF T2(
-	  .t(o2),
-	  .t2(k2),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o2)
-	  );
-	 T_FF T3(
-	  .t(o3),
-	  .t2(k3),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o3)
-	  );
-	 T_FF T4(
-	  .t(o4),
-	  .t2(k4),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o4)
-	  );
-	 T_FF T5(
-	  .t(o5),
-	  .t2(k5),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o5)
-	  );
-	 T_FF T6(
-	  .t(o6),
-	  .t2(k6),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o6)
-	  );
-	 T_FF T8(
-	  .t(o8),
-	  .t2(k8),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o8)
-	  );
-	 T_FF T7(
-	  .t(o7),
-	  .t2(k7),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o7)
-	  );
-	 T_FF T9(
-	  .t(o9),
-	  .t2(k9),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o9)
-	  );
-	 T_FF T10(
-	  .t(o10),
-	  .t2(k10),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o10)
-	  );
-	 T_FF T11(
-	  .t(o11),
-	  .t2(k11),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o11)
-	  );
-	 T_FF T12(
-	  .t(o12),
-	  .t2(k12),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o12)
-	  );
-	 T_FF T13(
-	  .t(o13),
-	  .t2(k13),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o13)
-	  );
-	 T_FF T14(
-	  .t(o14),
-	  .t2(k14),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o14)
-	  );
-	 T_FF T15(
-	  .t(o15),
-	  .t2(k15),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o15)
-	  );
-	 T_FF T16(
-	  .t(o16),
-	  .t2(k16),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o16)
-	  );	
-endmodule	
-
-module other_checker (clock,box1, box2, box3,box4,box5,box6,box7,box8,box9,box10,box11,box12,box13,box14, box15, box16,boxy1, boxy2, boxy3,boxy4,boxy5,boxy6,boxy7,boxy8,boxy9,boxy10,boxy11,boxy12,boxy13,boxy14, boxy15, boxy16, mux_other);
-	input [3:0] box1, box2, box3,box4,box5,box6,box7,box8,box9,box10,box11,box12,box13,box14, box15, box16;
-	reg [3:0] qt1,qt2,qt3,qt4,qt5,qt6,qt7,qt8,qt9,qt10,qt11,qt12,qt13,qt14,qt15,qt16;
-	output [3:0] boxy1, boxy2, boxy3,boxy4,boxy5,boxy6,boxy7,boxy8,boxy9,boxy10,boxy11,boxy12,boxy13,boxy14, boxy15, boxy16;
-	reg q;
-	input clock;
-	output mux_other;
-	always@(posedge clock)
-		begin
-			if (box1 == 4'b0000)
-			begin
-				q <= 1'b1;
-				qt1 <= 4'b0001;
-				qt2 <= box2;
-				qt3 <= box3;
-				qt4 <= box4;
-				qt5 <= box5;
-				qt6 <= box6;
-				qt7 <= box7;
-				qt8 <= box8;
-				qt9 <= box9;
-				qt10 <= box10;
-				qt11 <= box11;
-				qt12 <= box12;
-				qt13 <= box13;
-				qt14 <= box14;
-				qt15 <= box15;
-				qt16 <= box16;
-			end
-			else if (box2 == 4'b0000)
-			begin
-				q <= 1'b1;
-				qt1 <= box1;
-				qt2 <= 4'b0001;
-				qt3 <= box3;
-				qt4 <= box4;
-				qt5 <= box5;
-				qt6 <= box6;
-				qt7 <= box7;
-				qt8 <= box8;
-				qt9 <= box9;
-				qt10 <= box10;
-				qt11 <= box11;
-				qt12 <= box12;
-				qt13 <= box13;
-				qt14 <= box14;
-				qt15 <= box15;
-				qt16 <= box16;
-			end
-			
-			else if (box3 == 4'b0000)
-			begin
-				q <= 1'b1;
-				qt1 <= box1;
-				qt2 <= box2;
-				qt3 <= 4'b0001;
-				qt4 <= box4;
-				qt5 <= box5;
-				qt6 <= box6;
-				qt7 <= box7;
-				qt8 <= box8;
-				qt9 <= box9;
-				qt10 <= box10;
-				qt11 <= box11;
-				qt12 <= box12;
-				qt13 <= box13;
-				qt14 <= box14;
-				qt15 <= box15;
-				qt16 <= box16;
-			end
-			
-			else if (box4 == 4'b0000)
-			begin
-				q <= 1'b1;
-				qt1 <= box1;
-				qt2 <= box2;
-				qt3 <= box3;
-				qt4 <= 4'b0001;
-				qt5 <= box5;
-				qt6 <= box6;
-				qt7 <= box7;
-				qt8 <= box8;
-				qt9 <= box9;
-				qt10 <= box10;
-				qt11 <= box11;
-				qt12 <= box12;
-				qt13 <= box13;
-				qt14 <= box14;
-				qt15 <= box15;
-				qt16 <= box16;
-			end
-			
-			else if (box5 == 4'b0000)
-			begin
-				q <= 1'b1;
-				qt1 <= box1;
-				qt2 <= box2;
-				qt3 <= box3;
-				qt4 <= box4;
-				qt5 <= 4'b0001;
-				qt6 <= box6;
-				qt7 <= box7;
-				qt8 <= box8;
-				qt9 <= box9;
-				qt10 <= box10;
-				qt11 <= box11;
-				qt12 <= box12;
-				qt13 <= box13;
-				qt14 <= box14;
-				qt15 <= box15;
-				qt16 <= box16;
-			end
-			
-			else if (box6 == 4'b0000)
-			begin
-				q <= 1'b1;
-				qt1 <= box1;
-				qt2 <= box2;
-				qt3 <= box3;
-				qt4 <= box4;
-				qt5 <= box5;
-				qt6 <= 4'b0001;
-				qt7 <= box7;
-				qt8 <= box8;
-				qt9 <= box9;
-				qt10 <= box10;
-				qt11 <= box11;
-				qt12 <= box12;
-				qt13 <= box13;
-				qt14 <= box14;
-				qt15 <= box15;
-				qt16 <= box16;
-			end
-			
-			else if (box7 == 4'b0000)
-			begin
-				q <= 1'b1;
-				qt1 <= box1;
-				qt2 <= box2;
-				qt3 <= box3;
-				qt4 <= box4;
-				qt5 <= box5;
-				qt6 <= box6;
-				qt7 <= 4'b0001;
-				qt8 <= box8;
-				qt9 <= box9;
-				qt10 <= box10;
-				qt11 <= box11;
-				qt12 <= box12;
-				qt13 <= box13;
-				qt14 <= box14;
-				qt15 <= box15;
-				qt16 <= box16;
-			end
-			
-			else if (box8 == 4'b0000)
-			begin
-				q <= 1'b1;
-				qt1 <= box1;
-				qt2 <= box2;
-				qt3 <= box3;
-				qt4 <= box4;
-				qt5 <= box5;
-				qt6 <= box6;
-				qt7 <= box7;
-				qt8 <= 4'b0001;
-				qt9 <= box9;
-				qt10 <= box10;
-				qt11 <= box11;
-				qt12 <= box12;
-				qt13 <= box13;
-				qt14 <= box14;
-				qt15 <= box15;
-				qt16 <= box16;
-			end
-			
-			else if (box9 == 4'b0000)
-			begin
-				q <= 1'b1;
-				qt1 <= box1;
-				qt2 <= box2;
-				qt3 <= box3;
-				qt4 <= box4;
-				qt5 <= box5;
-				qt6 <= box6;
-				qt7 <= box7;
-				qt8 <= box8;
-				qt9 <= 4'b0001;
-				qt10 <= box10;
-				qt11 <= box11;
-				qt12 <= box12;
-				qt13 <= box13;
-				qt14 <= box14;
-				qt15 <= box15;
-				qt16 <= box16;
-			end
-			
-			else if (box10 == 4'b0000)
-			begin
-				q <= 1'b1;
-				qt1 <= box1;
-				qt2 <= box2;
-				qt3 <= box3;
-				qt4 <= box4;
-				qt5 <= box5;
-				qt6 <= box6;
-				qt7 <= box7;
-				qt8 <= box8;
-				qt9 <= box9;
-				qt10 <= 4'b0001;
-				qt11 <= box11;
-				qt12 <= box12;
-				qt13 <= box13;
-				qt14 <= box14;
-				qt15 <= box15;
-				qt16 <= box16;
-			end
-			
-			else if (box11 == 4'b0000)
-			begin
-				q <= 1'b1;
-				qt1 <= box1;
-				qt2 <= box2;
-				qt3 <= box3;
-				qt4 <= box4;
-				qt5 <= box5;
-				qt6 <= box6;
-				qt7 <= box7;
-				qt8 <= box8;
-				qt9 <= box9;
-				qt10 <= box10;
-				qt11 <= 4'b0001;
-				qt12 <= box12;
-				qt13 <= box13;
-				qt14 <= box14;
-				qt15 <= box15;
-				qt16 <= box16;
-			end
-			
-			else if (box12 == 4'b0000)
-			begin
-				q <= 1'b1;
-				qt1 <= box1;
-				qt2 <= box2;
-				qt3 <= box3;
-				qt4 <= box4;
-				qt5 <= box5;
-				qt6 <= box6;
-				qt7 <= box7;
-				qt8 <= box8;
-				qt9 <= box9;
-				qt10 <= box10;
-				qt11 <= box11;
-				qt12 <= 4'b0001;
-				qt13 <= box13;
-				qt14 <= box14;
-				qt15 <= box15;
-				qt16 <= box16;
-			end
-			
-			else if (box13 == 4'b0000)
-			begin
-				q <= 1'b1;
-				qt1 <= box1;
-				qt2 <= box2;
-				qt3 <= box3;
-				qt4 <= box4;
-				qt5 <= box5;
-				qt6 <= box6;
-				qt7 <= box7;
-				qt8 <= box8;
-				qt9 <= box9;
-				qt10 <= box10;
-				qt11 <= box11;
-				qt12 <= box12;
-				qt13 <= 4'b0001;
-				qt14 <= box14;
-				qt15 <= box15;
-				qt16 <= box16;
-			end
-			
-			else if (box14 == 4'b0000)
-			begin
-				q <= 1'b1;
-				qt1 <= box1;
-				qt2 <= box2;
-				qt3 <= box3;
-				qt4 <= box4;
-				qt5 <= box5;
-				qt6 <= box6;
-				qt7 <= box7;
-				qt8 <= box8;
-				qt9 <= box9;
-				qt10 <= box10;
-				qt11 <= box11;
-				qt12 <= box12;
-				qt13 <= box13;
-				qt14 <= 4'b0001;
-				qt15 <= box15;
-				qt16 <= box16;
-			end
-			
-			else if (box15 == 4'b0000)
-			begin
-				q <= 1'b1;
-				qt1 <= box1;
-				qt2 <= box2;
-				qt3 <= box3;
-				qt4 <= box4;
-				qt5 <= box5;
-				qt6 <= box6;
-				qt7 <= box7;
-				qt8 <= box8;
-				qt9 <= box9;
-				qt10 <= box10;
-				qt11 <= box11;
-				qt12 <= box12;
-				qt13 <= box13;
-				qt14 <= box14;
-				qt15 <= 4'b0001;
-				qt16 <= box16;
-			end
-			
-			else if (box16 == 4'b0000)
-			begin
-				q <= 1'b1;
-				qt1 <= box1;
-				qt2 <= box2;
-				qt3 <= box3;
-				qt4 <= box4;
-				qt5 <= box5;
-				qt6 <= box6;
-				qt7 <= box7;
-				qt8 <= box8;
-				qt9 <= box9;
-				qt10 <= box10;
-				qt11 <= box11;
-				qt12 <= box12;
-				qt13 <= box13;
-				qt14 <= box14;
-				qt15 <= box15;
-				qt16 <= 4'b0001;
-			end
-		end
-		assign mux_other = q;
-		assign boxy1=qt1;
-		assign boxy2=qt2;
-		assign boxy3=qt3;
-		assign boxy4=qt4;
-		assign boxy5=qt5;
-		assign boxy6=qt6;
-		assign boxy7=qt7;
-		assign boxy8=qt8;
-		assign boxy9=qt9;
-		assign boxy10=qt10;
-		assign boxy11=qt11;
-		assign boxy12=qt12;
-		assign boxy13=qt13;
-		assign boxy14=qt14;
-		assign boxy15=qt15;
-		assign boxy16=qt16;
-endmodule
-
-module random_numb(outvalue,clock_inere, b1, b2, b3,b4,b5,b6,b7,b8,b9,b10,b11,b12,b13,b14, b15, b16,o1,o2,o3,o4,o5,o6,o7,o8,o9,o10,o11,o12,o13,o14,o15,o16,real_movemen, mux_rand);
-	input [3:0] b1, b2, b3,b4,b5,b6,b7,b8,b9,b10,b11,b12,b13,b14, b15, b16;	
-	wire [3:0] k1, k2, k3,k4,k5,k6,k7,k8,k9,k10,k11,k12,k13,k14, k15, k16;	
-	output [3:0] o1,o2,o3,o4,o5,o6,o7,o8,o9,o10,o11,o12,o13,o14,o15,o16;
-	output mux_rand;
-	input [3:0] outvalue;
-	input clock_inere;
-	input real_movemen;
-	
-	random_number_grabber r0(.randombox(outvalue), .box1(b1), .box2(b2), .box3(b3),.box4(b4),.box5(b5),.box6(b6),.box7(b7),.box8(b8),.box9(b9),
-	.box10(b10),.box11(b11),.box12(b12),.box13(b13),.box14(b14), .box15(b15), .box16(b16),.q1(k1),.q2(k2),.q3(k3),.q4(k4),.q5(k5),.q6(k6),.q7(k7),.q8(k8),.q9(k9),.q10(k10),.q11(k11),.q12(k12),.q13(k13),.q14(k14),.q15(k15),.q16(k16),.clock(clock_inere), .muxy(mux_rand));
-	
-	 T_FF T1(
-	  .t(o1),
-	  .t2(k1),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o1)
-	  );
-	 T_FF T2(
-	  .t(o2),
-	  .t2(k2),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o2)
-	  );
-	 T_FF T3(
-	  .t(o3),
-	  .t2(k3),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o3)
-	  );
-	 T_FF T4(
-	  .t(o4),
-	  .t2(k4),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o4)
-	  );
-	 T_FF T5(
-	  .t(o5),
-	  .t2(k5),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o5)
-	  );
-	 T_FF T6(
-	  .t(o6),
-	  .t2(k6),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o6)
-	  );
-	 T_FF T8(
-	  .t(o8),
-	  .t2(k8),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o8)
-	  );
-	 T_FF T7(
-	  .t(o7),
-	  .t2(k7),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o7)
-	  );
-	 T_FF T9(
-	  .t(o9),
-	  .t2(k9),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o9)
-	  );
-	 T_FF T10(
-	  .t(o10),
-	  .t2(k10),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o10)
-	  );
-	 T_FF T11(
-	  .t(o11),
-	  .t2(k11),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o11)
-	  );
-	 T_FF T12(
-	  .t(o12),
-	  .t2(k12),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o12)
-	  );
-	 T_FF T13(
-	  .t(o13),
-	  .t2(k13),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o13)
-	  );
-	 T_FF T14(
-	  .t(o14),
-	  .t2(k14),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o14)
-	  );
-	 T_FF T15(
-	  .t(o15),
-	  .t2(k15),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o15)
-	  );
-	 T_FF T16(
-	  .t(o16),
-	  .t2(k16),
-	  .clock(clock_inere), 
-	  .reset(real_movemen), 
-	  .q(o16)
-	  );	
-endmodule
-	
-module random_number_grabber(randombox,clock,box1, box2, box3,box4,box5,box6,box7,box8,box9,box10,box11,box12,box13,box14, box15, box16, q1,q2,q3,q4,q5,q6,q7,q8,q9,q10,q11,q12,q13,q14,q15,q16, muxy);
+module random_number_grabber(clock, randombox,box1, box2, box3,box4,box5,box6,box7,box8,box9,box10,box11,box12,box13,box14, box15, box16, q1,q2,q3,q4,q5,q6,q7,q8,q9,q10,q11,q12,q13,q14,q15,q16, muxy);
 	input [3:0] box1, box2, box3,box4,box5,box6,box7,box8,box9,box10,box11,box12,box13,box14, box15, box16;
 	reg [3:0] qt1,qt2,qt3,qt4,qt5,qt6,qt7,qt8,qt9,qt10,qt11,qt12,qt13,qt14,qt15,qt16;
 	output [3:0] q1,q2,q3,q4,q5,q6,q7,q8,q9,q10,q11,q12,q13,q14,q15,q16;
 	reg q;
-	input clock;
 	input [3:0] randombox;
 	output muxy;
-	
+	input clock;
 	always@(posedge clock)
 		begin
 			case(randombox)
@@ -1640,19 +889,365 @@ module random_number_grabber(randombox,clock,box1, box2, box3,box4,box5,box6,box
 		assign q16=qt16;
 endmodule
 
-module T_FF(t,t2, clock, reset, q);
-   input [3:0] t, t2;
-   input clock, reset;
-   output reg [3:0] q;
-   always @ (posedge clock) //regular d flip flop
-   begin
-      if(reset == 1'b0)
-      begin
-         q <= t;
-      end
-      else
-      begin
-         q <= t2;
-      end
-   end
+module other_checker (box1,clock, box2, box3,box4,box5,box6,box7,box8,box9,box10,box11,box12,box13,box14, box15, box16,boxy1, boxy2, boxy3,boxy4,boxy5,boxy6,boxy7,boxy8,boxy9,boxy10,boxy11,boxy12,boxy13,boxy14, boxy15, boxy16, mux_other);
+	input [3:0] box1, box2, box3,box4,box5,box6,box7,box8,box9,box10,box11,box12,box13,box14, box15, box16;
+	reg [3:0] qt1,qt2,qt3,qt4,qt5,qt6,qt7,qt8,qt9,qt10,qt11,qt12,qt13,qt14,qt15,qt16;
+	output [3:0] boxy1, boxy2, boxy3,boxy4,boxy5,boxy6,boxy7,boxy8,boxy9,boxy10,boxy11,boxy12,boxy13,boxy14, boxy15, boxy16;
+	reg q;
+	input clock;
+	output mux_other;
+	always@(posedge clock)
+		begin
+			if (box1 == 4'b0000)
+			begin
+				q <= 1'b1;
+				qt1 <= 4'b0001;
+				qt2 <= box2;
+				qt3 <= box3;
+				qt4 <= box4;
+				qt5 <= box5;
+				qt6 <= box6;
+				qt7 <= box7;
+				qt8 <= box8;
+				qt9 <= box9;
+				qt10 <= box10;
+				qt11 <= box11;
+				qt12 <= box12;
+				qt13 <= box13;
+				qt14 <= box14;
+				qt15 <= box15;
+				qt16 <= box16;
+			end
+			else if (box2 == 4'b0000)
+			begin
+				q <= 1'b1;
+				qt1 <= box1;
+				qt2 <= 4'b0001;
+				qt3 <= box3;
+				qt4 <= box4;
+				qt5 <= box5;
+				qt6 <= box6;
+				qt7 <= box7;
+				qt8 <= box8;
+				qt9 <= box9;
+				qt10 <= box10;
+				qt11 <= box11;
+				qt12 <= box12;
+				qt13 <= box13;
+				qt14 <= box14;
+				qt15 <= box15;
+				qt16 <= box16;
+			end
+			
+			else if (box3 == 4'b0000)
+			begin
+				q <= 1'b1;
+				qt1 <= box1;
+				qt2 <= box2;
+				qt3 <= 4'b0001;
+				qt4 <= box4;
+				qt5 <= box5;
+				qt6 <= box6;
+				qt7 <= box7;
+				qt8 <= box8;
+				qt9 <= box9;
+				qt10 <= box10;
+				qt11 <= box11;
+				qt12 <= box12;
+				qt13 <= box13;
+				qt14 <= box14;
+				qt15 <= box15;
+				qt16 <= box16;
+			end
+			
+			else if (box4 == 4'b0000)
+			begin
+				q <= 1'b1;
+				qt1 <= box1;
+				qt2 <= box2;
+				qt3 <= box3;
+				qt4 <= 4'b0001;
+				qt5 <= box5;
+				qt6 <= box6;
+				qt7 <= box7;
+				qt8 <= box8;
+				qt9 <= box9;
+				qt10 <= box10;
+				qt11 <= box11;
+				qt12 <= box12;
+				qt13 <= box13;
+				qt14 <= box14;
+				qt15 <= box15;
+				qt16 <= box16;
+			end
+			
+			else if (box5 == 4'b0000)
+			begin
+				q <= 1'b1;
+				qt1 <= box1;
+				qt2 <= box2;
+				qt3 <= box3;
+				qt4 <= box4;
+				qt5 <= 4'b0001;
+				qt6 <= box6;
+				qt7 <= box7;
+				qt8 <= box8;
+				qt9 <= box9;
+				qt10 <= box10;
+				qt11 <= box11;
+				qt12 <= box12;
+				qt13 <= box13;
+				qt14 <= box14;
+				qt15 <= box15;
+				qt16 <= box16;
+			end
+			
+			else if (box6 == 4'b0000)
+			begin
+				q <= 1'b1;
+				qt1 <= box1;
+				qt2 <= box2;
+				qt3 <= box3;
+				qt4 <= box4;
+				qt5 <= box5;
+				qt6 <= 4'b0001;
+				qt7 <= box7;
+				qt8 <= box8;
+				qt9 <= box9;
+				qt10 <= box10;
+				qt11 <= box11;
+				qt12 <= box12;
+				qt13 <= box13;
+				qt14 <= box14;
+				qt15 <= box15;
+				qt16 <= box16;
+			end
+			
+			else if (box7 == 4'b0000)
+			begin
+				q <= 1'b1;
+				qt1 <= box1;
+				qt2 <= box2;
+				qt3 <= box3;
+				qt4 <= box4;
+				qt5 <= box5;
+				qt6 <= box6;
+				qt7 <= 4'b0001;
+				qt8 <= box8;
+				qt9 <= box9;
+				qt10 <= box10;
+				qt11 <= box11;
+				qt12 <= box12;
+				qt13 <= box13;
+				qt14 <= box14;
+				qt15 <= box15;
+				qt16 <= box16;
+			end
+			
+			else if (box8 == 4'b0000)
+			begin
+				q <= 1'b1;
+				qt1 <= box1;
+				qt2 <= box2;
+				qt3 <= box3;
+				qt4 <= box4;
+				qt5 <= box5;
+				qt6 <= box6;
+				qt7 <= box7;
+				qt8 <= 4'b0001;
+				qt9 <= box9;
+				qt10 <= box10;
+				qt11 <= box11;
+				qt12 <= box12;
+				qt13 <= box13;
+				qt14 <= box14;
+				qt15 <= box15;
+				qt16 <= box16;
+			end
+			
+			else if (box9 == 4'b0000)
+			begin
+				q <= 1'b1;
+				qt1 <= box1;
+				qt2 <= box2;
+				qt3 <= box3;
+				qt4 <= box4;
+				qt5 <= box5;
+				qt6 <= box6;
+				qt7 <= box7;
+				qt8 <= box8;
+				qt9 <= 4'b0001;
+				qt10 <= box10;
+				qt11 <= box11;
+				qt12 <= box12;
+				qt13 <= box13;
+				qt14 <= box14;
+				qt15 <= box15;
+				qt16 <= box16;
+			end
+			
+			else if (box10 == 4'b0000)
+			begin
+				q <= 1'b1;
+				qt1 <= box1;
+				qt2 <= box2;
+				qt3 <= box3;
+				qt4 <= box4;
+				qt5 <= box5;
+				qt6 <= box6;
+				qt7 <= box7;
+				qt8 <= box8;
+				qt9 <= box9;
+				qt10 <= 4'b0001;
+				qt11 <= box11;
+				qt12 <= box12;
+				qt13 <= box13;
+				qt14 <= box14;
+				qt15 <= box15;
+				qt16 <= box16;
+			end
+			
+			else if (box11 == 4'b0000)
+			begin
+				q <= 1'b1;
+				qt1 <= box1;
+				qt2 <= box2;
+				qt3 <= box3;
+				qt4 <= box4;
+				qt5 <= box5;
+				qt6 <= box6;
+				qt7 <= box7;
+				qt8 <= box8;
+				qt9 <= box9;
+				qt10 <= box10;
+				qt11 <= 4'b0001;
+				qt12 <= box12;
+				qt13 <= box13;
+				qt14 <= box14;
+				qt15 <= box15;
+				qt16 <= box16;
+			end
+			
+			else if (box12 == 4'b0000)
+			begin
+				q <= 1'b1;
+				qt1 <= box1;
+				qt2 <= box2;
+				qt3 <= box3;
+				qt4 <= box4;
+				qt5 <= box5;
+				qt6 <= box6;
+				qt7 <= box7;
+				qt8 <= box8;
+				qt9 <= box9;
+				qt10 <= box10;
+				qt11 <= box11;
+				qt12 <= 4'b0001;
+				qt13 <= box13;
+				qt14 <= box14;
+				qt15 <= box15;
+				qt16 <= box16;
+			end
+			
+			else if (box13 == 4'b0000)
+			begin
+				q <= 1'b1;
+				qt1 <= box1;
+				qt2 <= box2;
+				qt3 <= box3;
+				qt4 <= box4;
+				qt5 <= box5;
+				qt6 <= box6;
+				qt7 <= box7;
+				qt8 <= box8;
+				qt9 <= box9;
+				qt10 <= box10;
+				qt11 <= box11;
+				qt12 <= box12;
+				qt13 <= 4'b0001;
+				qt14 <= box14;
+				qt15 <= box15;
+				qt16 <= box16;
+			end
+			
+			else if (box14 == 4'b0000)
+			begin
+				q <= 1'b1;
+				qt1 <= box1;
+				qt2 <= box2;
+				qt3 <= box3;
+				qt4 <= box4;
+				qt5 <= box5;
+				qt6 <= box6;
+				qt7 <= box7;
+				qt8 <= box8;
+				qt9 <= box9;
+				qt10 <= box10;
+				qt11 <= box11;
+				qt12 <= box12;
+				qt13 <= box13;
+				qt14 <= 4'b0001;
+				qt15 <= box15;
+				qt16 <= box16;
+			end
+			
+			else if (box15 == 4'b0000)
+			begin
+				q <= 1'b1;
+				qt1 <= box1;
+				qt2 <= box2;
+				qt3 <= box3;
+				qt4 <= box4;
+				qt5 <= box5;
+				qt6 <= box6;
+				qt7 <= box7;
+				qt8 <= box8;
+				qt9 <= box9;
+				qt10 <= box10;
+				qt11 <= box11;
+				qt12 <= box12;
+				qt13 <= box13;
+				qt14 <= box14;
+				qt15 <= 4'b0001;
+				qt16 <= box16;
+			end
+			
+			else if (box16 == 4'b0000)
+			begin
+				q <= 1'b1;
+				qt1 <= box1;
+				qt2 <= box2;
+				qt3 <= box3;
+				qt4 <= box4;
+				qt5 <= box5;
+				qt6 <= box6;
+				qt7 <= box7;
+				qt8 <= box8;
+				qt9 <= box9;
+				qt10 <= box10;
+				qt11 <= box11;
+				qt12 <= box12;
+				qt13 <= box13;
+				qt14 <= box14;
+				qt15 <= box15;
+				qt16 <= 4'b0001;
+			end
+		end
+		assign mux_other = q;
+		assign boxy1=qt1;
+		assign boxy2=qt2;
+		assign boxy3=qt3;
+		assign boxy4=qt4;
+		assign boxy5=qt5;
+		assign boxy6=qt6;
+		assign boxy7=qt7;
+		assign boxy8=qt8;
+		assign boxy9=qt9;
+		assign boxy10=qt10;
+		assign boxy11=qt11;
+		assign boxy12=qt12;
+		assign boxy13=qt13;
+		assign boxy14=qt14;
+		assign boxy15=qt15;
+		assign boxy16=qt16;
 endmodule
