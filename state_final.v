@@ -11,6 +11,7 @@ module state_final (CLOCK_IN, randomnumber_generated,CONTROL, SQ1, SQ2,SQ3,SQ4,S
 	.b5(SQ5),.b6(SQ6),.b7(SQ7),.b8(SQ8),.b9(SQ9),.b10(SQ10),.b11(SQ11),.b12(SQ12),.b13(SQ13),.b14(SQ14),.b15(SQ15),
 	.b16(SQ16),.bart1(S1), .bart2(S2),.bart3(S3),.bart4(S4),.bart5(S5),.bart6(S6),
 	.bart7(S7),.bart8(S8),.bart9(S9),.bart10(S10),.bart11(S11),.bart12(S12),.bart13(S13),.bart14(S14),.bart15(S15),.bart16(S16), .select(mux_ind), .clock_inner(CLOCK_IN));
+	
 	always @(posedge CLOCK_IN)
 		begin
 			case(CONTROL)
@@ -1232,6 +1233,26 @@ module other_checker (box1,clock, box2, box3,box4,box5,box6,box7,box8,box9,box10
 				qt15 <= box15;
 				qt16 <= 4'b0001;
 			end
+			else 
+			begin
+				q <= 1'b0;
+				qt1 <= box1;
+				qt2 <= box2;
+				qt3 <= box3;
+				qt4 <= box4;
+				qt5 <= box5;
+				qt6 <= box6;
+				qt7 <= box7;
+				qt8 <= box8;
+				qt9 <= box9;
+				qt10 <= box10;
+				qt11 <= box11;
+				qt12 <= box12;
+				qt13 <= box13;
+				qt14 <= box14;
+				qt15 <= box15;
+				qt16 <= box16;
+			end		
 		end
 		assign mux_other = q;
 		assign boxy1=qt1;
