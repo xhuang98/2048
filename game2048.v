@@ -1,6 +1,6 @@
 module game2048(
 		// TODO: add keyboard
-		KEY,							// temporary input
+		SW,							// temporary input
 		CLOCK_50,
 		VGA_CLK,   						//	VGA Clock
 		VGA_HS,							//	VGA H_SYNC
@@ -13,7 +13,7 @@ module game2048(
 		);
 	//input: arrow keys, s key (start)
 	input			CLOCK_50;				//	50 MHz
-	input 	[4:0]	KEY;					// KEY4 is start/reset, KEY[3:0] is direction (up, down, left, right)
+	input 	[4:0]	SW;					// SW4 is start/reset, KEY[3:0] is direction (up, down, left, right)
 
 	//output: vga stuff:
 	output			VGA_CLK;   				//	VGA Clock      
