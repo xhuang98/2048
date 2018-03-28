@@ -1,5 +1,6 @@
 module game2048(
 		// TODO: add keyboard
+		KEY,							// temporary input
 		CLOCK_50,
 		VGA_CLK,   						//	VGA Clock
 		VGA_HS,							//	VGA H_SYNC
@@ -11,8 +12,10 @@ module game2048(
 		VGA_B   						//	VGA Blue[9:0]
 		);
 	//input: arrow keys, s key (start)
-	//output: vga stuff
 	input			CLOCK_50;				//	50 MHz
+	input 	[4:0]	KEY;					// KEY4 is start/reset, KEY[3:0] is direction (up, down, left, right)
+
+	//output: vga stuff:
 	output			VGA_CLK;   				//	VGA Clock      
 	output			VGA_HS;					//	VGA H_SYNC
 	output			VGA_VS;					//	VGA V_SYNC
@@ -22,6 +25,7 @@ module game2048(
 	output	[9:0]	VGA_G;	 				//	VGA Green[9:0]
 	output	[9:0]	VGA_B;   				//	VGA Blue[9:0]
 	
+	/*============ VGA Adapter =============*/
 	vga_adapter VGA(
 		.resetn(~start),
 		.clock(CLOCK_50),
@@ -45,18 +49,23 @@ module game2048(
 	defparam VGA.BITS_PER_COLOUR_CHANNEL = 1;
 	defparam VGA.BACKGROUND_IMAGE = "black.mif";
 	
-	/*=================================================*/
-	reg start;
+	/*======================================*/
+	
+	wire start;
 	wire [16 * 4 - 1 : 0] newvalues;
 	wire [16 * 4 - 1 : 0] oldvalues;
 	wire [3:0] box1in, box2in, box3in, box4in, box5in, box6in, box7in, box8in, box9in, box10in, box11in, box12in, box13in, box14in, box15in, box16in;
 	wire [3:0] box1out, box2out, box3out, box4out, box5out, box6out, box7out, box8out, box9out, box10out, box11out, box12out, box13out, box14out, box15out, box16out;
 	wire enable, clock, endstatus;
+	wire [3:0] direction;
 	reg [6:0] x, y; // x: 57-123; y: 27-93.
 	reg [2:0] colour; // white (111) for numbers, red (100) for box
 	
 	assign clock = CLOCK_50;
-	
+	// TODO: Assign keyboard to start
+	assign start = KEY[4];
+	// TODO: Assign keyboard values to direction
+	assign direction = KEY[3:0];
 	
 	// start is reset
 	box b1(box1in, enable, start, clock, box1out);
@@ -78,7 +87,7 @@ module game2048(
 		
 	assign {box1in, box2in, box3in, box4in, box5in, box6in, box7in, box8in, box9in, box10in, box11in, box12in, box13in, box14in, box15in, box16in} = newvalues;
 	assign oldvalues = {box1out, box2out, box3out, box4out, box5out, box6out, box7out, box8out, box9out, box10out, box11out, box12out, box13out, box14out, box15out, box16out};
-		
+	
 	control c0(start, clock, direction, oldvalues, enable, newvalues, endstatus);
 	
 	draw_grid d0(start, clock, oldvalues, x, y, colour);
