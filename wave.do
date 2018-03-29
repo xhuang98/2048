@@ -13,129 +13,74 @@ log {/*}
 # add wave {/*} would add all items in top level simulation module
 add wave {/*}
 
-force {clock_iner} 1 0, 0 {10 ns} -r 10ns
-force {o1} 0000
-force {o2} 0010
-force {o3} 0100
-force {o4} 0000
-force {o5} 0011
-force {o6} 0000
-force {o7} 0001
-force {o8} 0001
-force {o9} 0011
-force {o10} 0010
-force {o11} 0100
-force {o12} 0001
-force {o13} 0000
-force {o14} 0001
-force {o15} 0000
-force {o16} 0001
-force {real_movement} 11
-force {real_movemen_t} 0
-run 40ns
+force {clock_inere} 1 0, 0 {5 ns} -r 10ns
+force {po1} 0000
+force {po2} 0010
+force {po3} 0100
+force {po4} 0000
+force {po5} 0011
+force {po6} 0000
+force {po7} 0001
+force {po8} 0001
+force {po9} 0011
+force {po10} 0010
+force {po11} 0100
+force {po12} 0001
+force {po13} 0000
+force {po14} 0100
+force {po15} 0000
+force {po16} 0001
+force {random_number_ine} 1100
+force {real_movemente} 11
+force {real_movemen_te} 1
+run 10ns
 
-force {clock_iner} 1 0, 0 {10 ns} -r 10ns
-force {o1} 0000
-force {o2} 0010
-force {o3} 0100
-force {o4} 0000
-force {o5} 0011
-force {o6} 0000
-force {o7} 0001
-force {o8} 0001
-force {o9} 0011
-force {o10} 0010
-force {o11} 0100
-force {o12} 0001
-force {o13} 0000
-force {o14} 0001
-force {o15} 0000
-force {o16} 0001
-force {real_movement} 11
-force {real_movemen_t} 1
+force {clock_inere} 1 0, 0 {5 ns} -r 10ns
+force {random_number_ine} 1100
+force {real_movemente} 11
+force {real_movemen_te} 0
+run 10ns
+
+
+force {clock_inere} 1 0, 0 {5 ns} -r 10ns
+force {random_number_ine} 1100
+force {real_movemente} 11
+force {real_movemen_te} 1
+run 10ns
+
+force {clock_inere} 1 0, 0 {5 ns} -r 10ns
+force {random_number_ine} 1100
+force {real_movemente} 11
+force {real_movemen_te} 1
+run 10ns
+
+force {clock_inere} 1 0, 0 {5 ns} -r 10ns
+force {random_number_ine} 1100
+force {real_movemente} 11
+force {real_movemen_te} 1
 run 20ns
 
-
-force {clock_iner} 1 0, 0 {10 ns} -r 10ns
-force {o1} 0000
-force {o2} 0010
-force {o3} 0100
-force {o4} 0000
-force {o5} 0011
-force {o6} 0000
-force {o7} 0001
-force {o8} 0001
-force {o9} 0011
-force {o10} 0010
-force {o11} 0100
-force {o12} 0001
-force {o13} 0000
-force {o14} 0001
-force {o15} 0000
-force {o16} 0001
-force {real_movement} 11
-force {real_movemen_t} 0
+force {clock_inere} 1 0, 0 {5 ns} -r 10ns
+force {random_number_ine} 1100
+force {real_movemente} 11
+force {real_movemen_te} 1
 run 40ns
 
-force {clock_iner} 1 0, 0 {10 ns} -r 10ns
-force {o1} 0000
-force {o2} 0010
-force {o3} 0100
-force {o4} 0000
-force {o5} 0011
-force {o6} 0000
-force {o7} 0001
-force {o8} 0001
-force {o9} 0011
-force {o10} 0010
-force {o11} 0100
-force {o12} 0001
-force {o13} 0000
-force {o14} 0001
-force {o15} 0000
-force {o16} 0001
-force {real_movement} 10
-force {real_movemen_t} 0
+force {clock_inere} 1 0, 0 {5 ns} -r 10ns
+force {random_number_ine} 1100
+force {real_movemente} 11
+force {real_movemen_te} 1
 run 40ns
 
-force {clock_iner} 1 0, 0 {10 ns} -r 10ns
-force {o1} 0000
-force {o2} 0010
-force {o3} 0100
-force {o4} 0000
-force {o5} 0011
-force {o6} 0000
-force {o7} 0001
-force {o8} 0001
-force {o9} 0011
-force {o10} 0010
-force {o11} 0100
-force {o12} 0001
-force {o13} 0000
-force {o14} 0001
-force {o15} 0000
-force {o16} 0001
-force {real_movement} 10
-force {real_movemen_t} 0
-run 20ns
+force {clock_inere} 1 0, 0 {5 ns} -r 10ns
+force {random_number_ine} 1100
+force {real_movemente} 11
+force {real_movemen_te} 1
+run 40ns
 
-force {clock_iner} 1 0, 0 {10 ns} -r 10ns
-force {o1} 0000
-force {o2} 0010
-force {o3} 0100
-force {o4} 0000
-force {o5} 0011
-force {o6} 0000
-force {o7} 0001
-force {o8} 0001
-force {o9} 0011
-force {o10} 0010
-force {o11} 0100
-force {o12} 0001
-force {o13} 0000
-force {o14} 0001
-force {o15} 0000
-force {o16} 0001
-force {real_movement} 10
-force {real_movemen_t} 0
+
+force {clock_inere} 1 0, 0 {5 ns} -r 10ns
+force {random_number_ine} 1100
+force {real_movemente} 11
+force {real_movemen_te} 1
 run 40ns

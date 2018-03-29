@@ -1,15 +1,88 @@
-module move(o1,o2,o3,o4,o5,o6,o7,o8,o9,o10,o11,o12,o13,o14,o15,o16,q1,q2,q3,q4,q5,q6,q7,q8,q9,q10,q11,q12,q13,q14,q15,q16, clock_iner, real_movement, real_movemen_t, random_number_in);
+module move (po1,po2,po3,po4,po5,po6,po7,po8,po9,po10,po11,po12,po13,po14,po15,po16,pq1,pq2,pq3,pq4,pq5,pq6,pq7,pq8,pq9,pq10,pq11,pq12,pq13,pq14,pq15,pq16, clock_inere, real_movemente, real_movemen_te, random_number_ine);
+	input [3:0] po1,po2,po3,po4,po5,po6,po7,po8,po9,po10,po11,po12,po13,po14,po15,po16;
+	input clock_inere;
+	input [1:0] real_movemente;
+	input real_movemen_te;
+	input [3:0] random_number_ine;
+	output [3:0] pq1,pq2,pq3,pq4,pq5,pq6,pq7,pq8,pq9,pq10,pq11,pq12,pq13,pq14,pq15,pq16;
+	
+	move_below mer1(po1,po2,po3,po4,po5,po6,po7,po8,po9,po10,po11,po12,po13,po14,po15,
+	po16,pq1,pq2,pq3,pq4,pq5,pq6,pq7,pq8,pq9,pq10,pq11,pq12,pq13,pq14,pq15,pq16, clock_inere, real_movemente[1:0],real_movemen_te ,random_number_ine);
+	
+endmodule
+	
+module move_below(o1,o2,o3,o4,o5,o6,o7,o8,o9,o10,o11,o12,o13,o14,o15,o16,NSQ1,NSQ2,NSQ3,NSQ4,NSQ5,NSQ6,NSQ7,NSQ8,NSQ9,NSQ10,NSQ11,NSQ12,NSQ13,NSQ14,NSQ15,NSQ16, clock_iner, real_movement, real_movemen_t, random_number_in);
 	input [3:0] o1,o2,o3,o4,o5,o6,o7,o8,o9,o10,o11,o12,o13,o14,o15,o16;
 	wire [3:0] qt1,qt2,qt3,qt4,qt5,qt6,qt7,qt8,qt9,qt10,qt11,qt12,qt13,qt14,qt15,qt16;
-	output [3:0] q1,q2,q3,q4,q5,q6,q7,q8,q9,q10,q11,q12,q13,q14,q15,q16;
+	wire [3:0] q1,q2,q3,q4,q5,q6,q7,q8,q9,q10,q11,q12,q13,q14,q15,q16;
+	reg [3:0] onu1, onu2, onu3, onu4, onu5, onu6, onu7, onu8, onu9, onu10, onu11, onu12, onu13, onu14, onu15, onu16;	
+	output [3:0] NSQ1,NSQ2,NSQ3,NSQ4,NSQ5,NSQ6,NSQ7,NSQ8,NSQ9,NSQ10,NSQ11,NSQ12,NSQ13,NSQ14,NSQ15,NSQ16;
 	input clock_iner;
 	input [1:0] real_movement;
 	input real_movemen_t;
-	wire muxer;
+	wire [1:0] muxer;
 	input [3:0] random_number_in;
 	move_final m1(o1,o2,o3,o4,o5,o6,o7,o8,o9,o10,o11,o12,o13,o14,o15,
 	o16,qt1,qt2,qt3,qt4,qt5,qt6,qt7,qt8,qt9,qt10,qt11,qt12,qt13,qt14,qt15,qt16, clock_iner,real_movemen_t, real_movement[1:0]);
 	state_final s1(.CLOCK_IN(clock_iner), .randomnumber_generated(random_number_in),.CONTROL(real_movemen_t), .SQ1(qt1), .SQ2(qt2),.SQ3(qt3),.SQ4(qt4),.SQ5(qt5),.SQ6(qt6),.SQ7(qt7),.SQ8(qt8),.SQ9(qt9),.SQ10(qt10),.SQ11(qt11),.SQ12(qt12),.SQ13(qt13),.SQ14(qt14),.SQ15(qt15),.SQ16(qt16), .NSQ1(q1),.NSQ2(q2),.NSQ3(q3),.NSQ4(q4),.NSQ5(q5),.NSQ6(q6),.NSQ7(q7),.NSQ8(q8),.NSQ9(q9),.NSQ10(q10),.NSQ11(q11),.NSQ12(q12),.NSQ13(q13),.NSQ14(q14),.NSQ15(q15),.NSQ16(q16), .mux_ind(muxer));
+	
+	always @(posedge clock_iner)
+		begin
+			case(real_movemen_t)
+				0:begin
+					onu1 <= o1;
+					onu2 <= o2;
+					onu3 <= o3;
+					onu4 <= o4;
+					onu5 <= o5;
+					onu6 <= o6;
+					onu7 <= o7;
+					onu8 <= o8;
+					onu9 <= o9;
+					onu10 <= o10;
+					onu11 <= o11;
+					onu12 <= o12;
+					onu13 <= o13;
+					onu14 <= o14;
+					onu15 <= o15;
+					onu16 <= o16;
+					end
+				1:begin
+					onu1 <= q1;
+					onu2 <= q2;
+					onu3 <= q3;
+					onu4 <= q4;
+					onu5 <= q5;
+					onu6 <= q6;
+					onu7 <= q7;
+					onu8 <= q8;
+					onu9 <= q9;
+					onu10 <= q10;
+					onu11 <= q11;
+					onu12 <= q12;
+					onu13 <= q13;
+					onu14 <= q14;
+					onu15 <= q15;
+					onu16 <= q16;
+					end
+				endcase
+		end
+	assign NSQ1= onu1;
+	assign NSQ2 = onu2;
+	assign NSQ3 = onu3;
+	assign NSQ4 = onu4;
+	assign NSQ5 = onu5;
+	assign NSQ6 = onu6;
+	assign NSQ7 = onu7;
+	assign NSQ8= onu8;
+	assign NSQ9= onu9;
+	assign NSQ10= onu10;
+	assign NSQ11= onu11;
+	assign NSQ12= onu12;
+	assign NSQ13= onu13;
+	assign NSQ14= onu14;
+	assign NSQ15= onu15;
+	assign NSQ16= onu16;
 endmodule
 
 module move_final (SQ1, SQ2,SQ3,SQ4,SQ5,SQ6,SQ7,SQ8,SQ9,SQ10,SQ11,SQ12,SQ13,SQ14,SQ15,SQ16, NSQ1,NSQ2,NSQ3,NSQ4,NSQ5,NSQ6,NSQ7,NSQ8,NSQ9,NSQ10,NSQ11,NSQ12,NSQ13,NSQ14,NSQ15,NSQ16, CLOCK_IN, CONTROL,MOVER);
@@ -1742,3 +1815,22 @@ module other_checker (box1,clock, box2, box3,box4,box5,box6,box7,box8,box9,box10
 		assign boxy15=qt15;
 		assign boxy16=qt16;
 endmodule
+
+module FF(t, clock, reset, q);
+   input [3:0] t;
+	input clock, reset;
+   output reg [3:0] q;   
+   always @ (posedge clock) //regular d flip flop
+   begin
+      if(reset == 1'b0)
+      begin
+         q <= 4'b0000;
+      end
+      else
+      begin
+         q <= d;
+      end
+   end
+endmodule
+
+
