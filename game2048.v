@@ -60,8 +60,8 @@ module game2048(
 	wire [3:0] box1out, box2out, box3out, box4out, box5out, box6out, box7out, box8out, box9out, box10out, box11out, box12out, box13out, box14out, box15out, box16out;
 	wire enable, clock, endstatus;
 	wire [3:0] direction;
-	reg [6:0] x, y; // x: 57-123; y: 27-93.
-	reg [2:0] colour; // white (111) for numbers, red (100) for box
+	wire [6:0] x, y; // x: 57-123; y: 27-93.
+	wire [2:0] colour; // white (111) for numbers, red (100) for box
 	
 	assign clock = CLOCK_50;
 	// TODO: Assign keyboard to start
