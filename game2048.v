@@ -2,6 +2,7 @@ module game2048(
 		// TODO: add keyboard
 		LEDR,
 		HEX0,
+		HEX1,
 		SW,							// temporary input
 		CLOCK_50,
 		VGA_CLK,   						//	VGA Clock
@@ -18,7 +19,7 @@ module game2048(
 	input 	[4:0]	SW;					// SW4 is start/reset, SW[3:0] is direction (up, down, left, right)
 	
 	output [1:0] LEDR;
-	output [6:0] HEX0;
+	output [6:0] HEX0, HEX1;
 	//output: vga stuff:
 	output			VGA_CLK;   				//	VGA Clock      
 	output			VGA_HS;					//	VGA H_SYNC
@@ -64,7 +65,7 @@ module game2048(
 	wire [3:0] direction;
 	wire [6:0] x, y; // x: 57-123; y: 27-93.
 	wire [2:0] colour; // white (111) for numbers, red (100) for box
-	wire [2:0] state;
+	wire [2:0] state, n_state;
 	
 	assign clock = CLOCK_50;
 	// TODO: Assign keyboard to start
@@ -93,7 +94,7 @@ module game2048(
 	assign {box1in, box2in, box3in, box4in, box5in, box6in, box7in, box8in, box9in, box10in, box11in, box12in, box13in, box14in, box15in, box16in} = newvalues;
 	assign oldvalues = {box1out, box2out, box3out, box4out, box5out, box6out, box7out, box8out, box9out, box10out, box11out, box12out, box13out, box14out, box15out, box16out};
 	
-	control c0(start, clock, direction, oldvalues, enable, newvalues, endstatus, state);
+	control c0(start, clock, direction, oldvalues, enable, newvalues, endstatus, state, n_state);
 	
 	draw_grid d0(start, clock, oldvalues, x, y, colour);
 	
@@ -101,6 +102,7 @@ module game2048(
 	assign LEDR[1:0] = endstatus;
 	
 	hex_decoder h0({1'b0,state}, HEX0);
+	hex_decoder h1({1'b0,n_state}, HEX1);
 endmodule
 
 
