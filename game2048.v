@@ -1,5 +1,6 @@
 module game2048(
 		// TODO: add keyboard
+		LEDR,
 		SW,							// temporary input
 		CLOCK_50,
 		VGA_CLK,   						//	VGA Clock
@@ -9,12 +10,13 @@ module game2048(
 		VGA_SYNC_N,						//	VGA SYNC
 		VGA_R,   						//	VGA Red[9:0]
 		VGA_G,	 						//	VGA Green[9:0]
-		VGA_B   						//	VGA Blue[9:0]
+		VGA_B   						//	VGA Blue[9:0]	
 		);
 	//input: arrow keys, s key (start)
 	input			CLOCK_50;				//	50 MHz
 	input 	[4:0]	SW;					// SW4 is start/reset, SW[3:0] is direction (up, down, left, right)
-
+	
+	ourput [1:0] LEDR;
 	//output: vga stuff:
 	output			VGA_CLK;   				//	VGA Clock      
 	output			VGA_HS;					//	VGA H_SYNC
@@ -92,6 +94,6 @@ module game2048(
 	
 	draw_grid d0(start, clock, oldvalues, x, y, colour);
 	
-	resultdisplay r0(endstatus, x, y, colour);
-	
+	//resultdisplay r0(endstatus, x, y, colour);
+	assign LEDR[1:0] = endstatus;
 endmodule
