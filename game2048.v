@@ -16,7 +16,7 @@ module game2048(
 	input			CLOCK_50;				//	50 MHz
 	input 	[4:0]	SW;					// SW4 is start/reset, SW[3:0] is direction (up, down, left, right)
 	
-	ourput [1:0] LEDR;
+	output [1:0] LEDR;
 	//output: vga stuff:
 	output			VGA_CLK;   				//	VGA Clock      
 	output			VGA_HS;					//	VGA H_SYNC
