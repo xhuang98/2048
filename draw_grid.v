@@ -11,22 +11,22 @@ module draw_grid(reset, clock, values, x, y, colour);
 	always @(*)
 	begin
 		case(boxcount)
-		4'b0000: value <= values[(4'b0000 + 1'b1) * 1'd4: 4'b0000 * 1'd4];
-		4'b0001: value <= values[(4'b0001 + 1'b1) * 1'd4: 4'b0001 * 1'd4];
-		4'b0010: value <= values[(4'b0010 + 1'b1) * 1'd4: 4'b0010 * 1'd4];
-		4'b0011: value <= values[(4'b0011 + 1'b1) * 1'd4: 4'b0011 * 1'd4];
-		4'b0100: value <= values[(4'b0100 + 1'b1) * 1'd4: 4'b0100 * 1'd4];
-		4'b0101: value <= values[(4'b0101 + 1'b1) * 1'd4: 4'b0101 * 1'd4];
-		4'b0110: value <= values[(4'b0110 + 1'b1) * 1'd4: 4'b0110 * 1'd4];
-		4'b0111: value <= values[(4'b0111 + 1'b1) * 1'd4: 4'b0111 * 1'd4];
-		4'b1000: value <= values[(4'b1000 + 1'b1) * 1'd4: 4'b1000 * 1'd4];
-		4'b1001: value <= values[(4'b1001 + 1'b1) * 1'd4: 4'b1001 * 1'd4];
-		4'b1010: value <= values[(4'b1010 + 1'b1) * 1'd4: 4'b1010 * 1'd4];
-		4'b1011: value <= values[(4'b1011 + 1'b1) * 1'd4: 4'b1011 * 1'd4];
-		4'b1100: value <= values[(4'b1100 + 1'b1) * 1'd4: 4'b1100 * 1'd4];
-		4'b1101: value <= values[(4'b1101 + 1'b1) * 1'd4: 4'b1101 * 1'd4];
-		4'b1110: value <= values[(4'b1110 + 1'b1) * 1'd4: 4'b1110 * 1'd4];
-		4'b1111: value <= values[(4'b1111 + 1'b1) * 1'd4: 4'b1111 * 1'd4];
+		4'b0000: value <= values[(4'b0000 + 1'b1) * 4'b0100: 4'b0000 * 4'b0100];
+		4'b0001: value <= values[(4'b0001 + 1'b1) * 4'b0100: 4'b0001 * 4'b0100];
+		4'b0010: value <= values[(4'b0010 + 1'b1) * 4'b0100: 4'b0010 * 4'b0100];
+		4'b0011: value <= values[(4'b0011 + 1'b1) * 4'b0100: 4'b0011 * 4'b0100];
+		4'b0100: value <= values[(4'b0100 + 1'b1) * 4'b0100: 4'b0100 * 4'b0100];
+		4'b0101: value <= values[(4'b0101 + 1'b1) * 4'b0100: 4'b0101 * 4'b0100];
+		4'b0110: value <= values[(4'b0110 + 1'b1) * 4'b0100: 4'b0110 * 4'b0100];
+		4'b0111: value <= values[(4'b0111 + 1'b1) * 4'b0100: 4'b0111 * 4'b0100];
+		4'b1000: value <= values[(4'b1000 + 1'b1) * 4'b0100: 4'b1000 * 4'b0100];
+		4'b1001: value <= values[(4'b1001 + 1'b1) * 4'b0100: 4'b1001 * 4'b0100];
+		4'b1010: value <= values[(4'b1010 + 1'b1) * 4'b0100: 4'b1010 * 4'b0100];
+		4'b1011: value <= values[(4'b1011 + 1'b1) * 4'b0100: 4'b1011 * 4'b0100];
+		4'b1100: value <= values[(4'b1100 + 1'b1) * 4'b0100: 4'b1100 * 4'b0100];
+		4'b1101: value <= values[(4'b1101 + 1'b1) * 4'b0100: 4'b1101 * 4'b0100];
+		4'b1110: value <= values[(4'b1110 + 1'b1) * 4'b0100: 4'b1110 * 4'b0100];
+		4'b1111: value <= values[(4'b1111 + 1'b1) * 4'b0100: 4'b1111 * 4'b0100];
 		endcase
 	end
 	
@@ -42,7 +42,7 @@ module draw_grid(reset, clock, values, x, y, colour);
 	
 	always@(*)
 	begin
-		if(xcount == 2'd14)
+		if(xcount ==  4'b1110)
 			clock_y = 1'b1;
 		else
 			clock_y = 1'b0;
@@ -129,84 +129,84 @@ module analyze(value, xcount, ycount, boxcount, X, Y, colour);
 			4'b0000: 
 				colour <= 3'b100;
 			4'b0001:
-				if(((xcount == 1'd7 || xcount == 1'd8 || xcount == 1'd9 || xcount == 2'd10) && (ycount == 1'd6 || ycount == 1'd8 || ycount == 2'd10)) || 
-					(xcount == 1'd7 && ycount == 1'd9) || (xcount == 2'd10 && ycount == 1'd7))
+				if(((xcount == 4'0111 || xcount ==  4'b1000 || xcount ==  4'b1001 || xcount ==  4'b1010) && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1010)) || 
+					(xcount ==  4'b0111 && ycount ==  4'b1001) || (xcount ==  4'b1010 && ycount ==  4'b0111))
 					colour <= 3'b111;
 				else
 					colour <= 3'b100;
 			4'b0010:
-				if((xcount == 2'd10 && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8 || ycount == 1'd9 || ycount == 2'd10)) || 
-					(xcount == 1'd7 && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8)) || ((xcount == 1'd8 || xcount == 1'd9) && ycount == 1'd8))
+				if((xcount ==  4'b1010 && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)) || 
+					(xcount ==  4'b0111 && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000)) || ((xcount ==  4'b1000 || xcount ==  4'b1001) && ycount ==  4'b1000))
 					colour <= 3'b111;
 				else
 					colour <= 3'b100;
 			4'b0011:
-				if(((xcount == 1'd7 || xcount == 2'd10) && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8 || ycount == 1'd9 || ycount == 2'd10)) ||
-					((xcount == 1'd8 || xcount == 1'd9) && (ycount == 1'd6 || ycount == 1'd8 || ycount == 2'd10)))
+				if(((xcount ==  4'b0111 || xcount ==  4'b1010) && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)) ||
+					((xcount ==  4'b1000 || xcount ==  4'b1001) && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1010)))
 					colour <= 3'b111;
 				else
 					colour <= 3'b100;
 			4'b0100:
-				if(((xcount == 1'd7 || xcount == 1'd9) && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8 || ycount == 1'd9 || ycount == 2'd10)) || 
-					(xcount == 2'd10 && (ycount == 1'd6 || ycount == 1'd8 || ycount == 2'd10)) || 
-					(xcount == 2'd11 && (ycount == 1'd6 || ycount == 1'd8 || ycount == 1'd9 || ycount == 2'd10)))
+				if(((xcount ==  4'b0111 || xcount ==  4'b1001) && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)) || 
+					(xcount ==  4'b1010 && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1010)) || 
+					(xcount ==  4'b1011 && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)))
 					colour <= 3'b111;
 				else
 					colour <= 3'b100;
 			4'b0101:
-				if(((xcount == 1'd5 || xcount == 1'd6 || xcount == 2'd10) && (ycount == 1'd6 || ycount == 1'd8 || ycount == 2'd10)) || 
-					(xcount == 1'd7 && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8 || ycount == 1'd9 || ycount == 2'd10)) || 
-					(xcount == 1'd9 && (ycount == 1'd6 || ycount == 1'd8 || ycount == 1'd9 || ycount == 2'd10)) ||
-					(xcount == 1'd11 && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8 || ycount == 2'd10)))
+				if(((xcount == 4'b0101 || xcount == 4'b0110 || xcount ==  4'b1010) && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1010)) || 
+					(xcount ==  4'b0111 && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)) || 
+					(xcount ==  4'b1001 && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)) ||
+					(xcount == 4'b00011 && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000 || ycount ==  4'b1010)))
 					colour <= 3'b111;
 				else
 					colour <= 3'b100;
 			4'b0110:
-				if(((xcount == 1'd5 || xcount == 2'd11) && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8 || ycount == 1'd9 || ycount == 2'd10)) ||
-					(xcount == 1'd6 && (ycount == 1'd6 || ycount == 1'd8 || ycount == 2'd10)) || 
-					(xcount == 1'd7 && (ycount == 1'd6 || ycount == 1'd8 || ycount == 1'd9 || ycount == 2'd10)) || 
-					(xcount == 1'd9 && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8)) || 
-					(xcount == 2'd10 && ycount == 1'd8))
+				if(((xcount == 4'b0101 || xcount ==  4'b1011) && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)) ||
+					(xcount == 4'b0110 && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1010)) || 
+					(xcount ==  4'b0111 && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)) || 
+					(xcount ==  4'b1001 && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000)) || 
+					(xcount ==  4'b1010 && ycount ==  4'b1000))
 					colour <= 3'b111;
 				else
 					colour <= 3'b100;
 			4'b0111:
-				if(((xcount == 1'd3 || xcount == 2'd10 || xcount == 2'd13) && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8 || ycount == 1'd9 || ycount == 2'd10)) || 
-					(xcount == 1'd5 && (ycount == 1'd6 || ycount == 1'd8 || ycount == 1'd9 || ycount == 2'd10)) || 
-					(xcount == 1'd8 && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8 || ycount == 2'd10)) || 
-					((xcount == 1'd6 || xcount == 1'd7 || xcount == 2'd11 || xcount == 2'd12) && (ycount == 1'd6 || ycount == 1'd8 || ycount == 2'd10)))
+				if(((xcount == 4'b0011 || xcount ==  4'b1010 || xcount ==  4'b1101) && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)) || 
+					(xcount == 4'b0101 && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)) || 
+					(xcount ==  4'b1000 && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000 || ycount ==  4'b1010)) || 
+					((xcount == 4'b0110 || xcount ==  4'b0111 || xcount ==  4'b1011 || xcount ==  4'b1100) && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1010)))
 					colour <= 3'b111;
 				else
 					colour <= 3'b100;
 			4'b1000:
-				if(((xcount == 1'd3 || xcount == 1'd4 || xcount == 1'd8 || xcount == 1'd9 || xcount == 2'd13 || xcount == 2'd14) && (ycount == 1'd6 || ycount == 1'd8 || ycount == 2'd10)) || 
-					((xcount == 1'd2 || xcount == 2'd10 || xcount == 2'd15) && (ycount == 1'd6 || ycount == 1'd8 || ycount == 1'd9 || ycount == 2'd10)) || 
-					((xcount == 1'd5 || xcount == 1'd7) && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8 || ycount == 2'd10)) || 
-					(xcount == 2'd12 || (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8 || ycount == 1'd9 || ycount == 2'd10)))
+				if(((xcount == 4'b0011 || xcount == 4'b0100 || xcount ==  4'b1000 || xcount ==  4'b1001 || xcount ==  4'b1101 || xcount ==  4'b1110) && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1010)) || 
+					((xcount == 4'b0010 || xcount ==  4'b1010 || xcount ==  4'b1111) && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)) || 
+					((xcount == 4'b0101 || xcount ==  4'b0111) && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000 || ycount ==  4'b1010)) || 
+					(xcount ==  4'b1100 || (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)))
 					colour <= 3'b111;
 				else
 					colour <= 3'b100;
 			4'b1001:
-				if(((xcount == 1'd3 || xcount == 1'd4 || xcount == 2'd13 || xcount == 2'd14) && (ycount == 1'd6 || ycount == 1'd8 || ycount == 2'd10)) ||
-					(xcount == 1'd9 && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8 || ycount == 1'd9 || ycount == 2'd10)) || 
-					((xcount == 1'd2 || xcount == 2'd15) && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8 || ycount == 1'd9 || ycount == 2'd10)) || 
-					((xcount == 1'd5 || xcount == 2'd12) && (ycount == 1'd6 || ycount == 1'd8 || ycount == 1'd9 || ycount == 2'd10)))
+				if(((xcount == 4'b0011 || xcount == 4'b0100 || xcount ==  4'b1101 || xcount ==  4'b1110) && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1010)) ||
+					(xcount ==  4'b1001 && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)) || 
+					((xcount == 4'b0010 || xcount ==  4'b1111) && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)) || 
+					((xcount == 4'b0101 || xcount ==  4'b1100) && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)))
 					colour <= 3'b111;
 				else
 					colour <= 3'b100;
 			4'b1010:
-				if(((xcount == 1'd2 || xcount == 1'd4 || xcount == 1'd6 || xcount == 2'd14) && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8 || ycount == 1'd9 || ycount == 2'd10)) || 
-					(xcount == 1'd5 && (ycount == 1'd6 || ycount == 2'd10)) || (xcount == 1'd8 && (ycount == 1'd6 || ycount == 1'd8 || ycount == 1'd9 || ycount == 2'd10)) ||
-					(xcount == 1'd9 && (ycount == 1'd6 || ycount == 1'd8 || ycount == 2'd10)) || (xcount == 2'd10 && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8 || ycount == 2'd10)) ||
-					(xcount == 2'd12 && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8)) || (xcount == 2'd13 && ycount == 1'd8))
+				if(((xcount == 4'b0010 || xcount == 4'b0100 || xcount == 4'b0110 || xcount ==  4'b1110) && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)) || 
+					(xcount == 4'b0101 && (ycount == 4'b0110 || ycount ==  4'b1010)) || (xcount ==  4'b1000 && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)) ||
+					(xcount ==  4'b1001 && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1010)) || (xcount ==  4'b1010 && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000 || ycount ==  4'b1010)) ||
+					(xcount ==  4'b1100 && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000)) || (xcount ==  4'b1101 && ycount ==  4'b1000))
 					colour <= 3'b111;
 				else
 					colour <= 3'b100;
 			4'b1011:
-				if((xcount == 1'd1 && (ycount == 1'd6 || ycount == 1'd8 || ycount == 1'd9 || ycount == 2'd10)) || ((xcount == 1'd2 || xcount == 2'd14) && (ycount == 1'd6 || ycount == 1'd8 || ycount == 2'd10)) ||
-					(xcount == 1'd3 && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8 || ycount == 2'd10)) ||
-					((xcount == 1'd5 || xcount == 1'd7 || xcount == 2'd11 || xcount == 2'd13 || xcount == 2'd15) && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8 || ycount == 1'd9 || ycount == 2'd10)) ||
-					(xcount == 1'd9 && (ycount == 1'd6 || ycount == 1'd7 || ycount == 1'd8)) || (xcount == 2'd10 && ycount == 1'd8))
+				if((xcount == 4'b0001 && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)) || ((xcount == 4'b0010 || xcount ==  4'b1110) && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1010)) ||
+					(xcount == 4'b0011 && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000 || ycount ==  4'b1010)) ||
+					((xcount == 4'b0101 || xcount ==  4'b0111 || xcount ==  4'b1011 || xcount ==  4'b1101 || xcount ==  4'b1111) && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)) ||
+					(xcount ==  4'b1001 && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000)) || (xcount ==  4'b1010 && ycount ==  4'b1000))
 					colour <= 3'b111;
 				else
 					colour <= 3'b100;
