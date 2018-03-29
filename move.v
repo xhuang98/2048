@@ -5,6 +5,8 @@ module move(o1,o2,o3,o4,o5,o6,o7,o8,o9,o10,o11,o12,o13,o14,o15,o16,q1,q2,q3,q4,q
 	input clock_iner;
 	input [1:0] real_movement;
 	input real_movemen_t;
+	wire muxer;
+	input [3:0] random_number_in;
 	move_final m1(o1,o2,o3,o4,o5,o6,o7,o8,o9,o10,o11,o12,o13,o14,o15,
 	o16,qt1,qt2,qt3,qt4,qt5,qt6,qt7,qt8,qt9,qt10,qt11,qt12,qt13,qt14,qt15,qt16, clock_iner,real_movemen_t, real_movement[1:0]);
 	state_final s1(.CLOCK_IN(clock_iner), .randomnumber_generated(random_number_in),.CONTROL(real_movemen_t), .SQ1(qt1), .SQ2(qt2),.SQ3(qt3),.SQ4(qt4),.SQ5(qt5),.SQ6(qt6),.SQ7(qt7),.SQ8(qt8),.SQ9(qt9),.SQ10(qt10),.SQ11(qt11),.SQ12(qt12),.SQ13(qt13),.SQ14(qt14),.SQ15(qt15),.SQ16(qt16), .NSQ1(q1),.NSQ2(q2),.NSQ3(q3),.NSQ4(q4),.NSQ5(q5),.NSQ6(q6),.NSQ7(q7),.NSQ8(q8),.NSQ9(q9),.NSQ10(q10),.NSQ11(q11),.NSQ12(q12),.NSQ13(q13),.NSQ14(q14),.NSQ15(q15),.NSQ16(q16), .mux_ind(muxer));
@@ -17,8 +19,8 @@ module move_final (SQ1, SQ2,SQ3,SQ4,SQ5,SQ6,SQ7,SQ8,SQ9,SQ10,SQ11,SQ12,SQ13,SQ14
 	output [3:0] NSQ1,NSQ2,NSQ3,NSQ4,NSQ5,NSQ6,NSQ7,NSQ8,NSQ9,NSQ10,NSQ11,NSQ12,NSQ13,NSQ14,NSQ15,NSQ16;
 	input CONTROL;
 	input CLOCK_IN;
-	input MOVER;
-	move_final m1(.old_box1(SQ1),.old_box2(SQ2),.old_box3(SQ3),.old_box4(SQ4),.old_box5(SQ5),.old_box6(SQ6),.old_box7(SQ7),.old_box8(SQ8),.old_box9(SQ9),.old_box10(SQ10),.old_box11(SQ11),.old_box12(SQ12),.old_box13(SQ13),.old_box14(SQ14),.old_box15(SQ15),
+	input [1:0]MOVER;
+	move_up m1(.old_box1(SQ1),.old_box2(SQ2),.old_box3(SQ3),.old_box4(SQ4),.old_box5(SQ5),.old_box6(SQ6),.old_box7(SQ7),.old_box8(SQ8),.old_box9(SQ9),.old_box10(SQ10),.old_box11(SQ11),.old_box12(SQ12),.old_box13(SQ13),.old_box14(SQ14),.old_box15(SQ15),
 	.old_box16(SQ16),.newbox1(S1), .newbox2(S2),.newbox3(S3),.newbox4(S4),.newbox5(S5),.newbox6(S6),.newbox7(S7),.newbox8(S8),.newbox9(S9),.newbox10(S10),.newbox11(S11),.newbox12(S12),.newbox13(S13),.newbox14(S14),.newbox15(S15),.newbox16(S16), .clock_in(CLOCK_IN), .movement(MOVER));
 	
 	always @(posedge CLOCK_IN)
