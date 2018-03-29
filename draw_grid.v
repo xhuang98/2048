@@ -11,22 +11,40 @@ module draw_grid(reset, clock, values, x, y, colour);
 	always @(*)
 	begin
 		case(boxcount)
-		4'b0000: value <= values[(4'b0000 + 1'b1) * 4'b0100: 4'b0000 * 4'b0100];
-		4'b0001: value <= values[(4'b0001 + 1'b1) * 4'b0100: 4'b0001 * 4'b0100];
-		4'b0010: value <= values[(4'b0010 + 1'b1) * 4'b0100: 4'b0010 * 4'b0100];
-		4'b0011: value <= values[(4'b0011 + 1'b1) * 4'b0100: 4'b0011 * 4'b0100];
-		4'b0100: value <= values[(4'b0100 + 1'b1) * 4'b0100: 4'b0100 * 4'b0100];
-		4'b0101: value <= values[(4'b0101 + 1'b1) * 4'b0100: 4'b0101 * 4'b0100];
-		4'b0110: value <= values[(4'b0110 + 1'b1) * 4'b0100: 4'b0110 * 4'b0100];
-		4'b0111: value <= values[(4'b0111 + 1'b1) * 4'b0100: 4'b0111 * 4'b0100];
-		4'b1000: value <= values[(4'b1000 + 1'b1) * 4'b0100: 4'b1000 * 4'b0100];
-		4'b1001: value <= values[(4'b1001 + 1'b1) * 4'b0100: 4'b1001 * 4'b0100];
-		4'b1010: value <= values[(4'b1010 + 1'b1) * 4'b0100: 4'b1010 * 4'b0100];
-		4'b1011: value <= values[(4'b1011 + 1'b1) * 4'b0100: 4'b1011 * 4'b0100];
-		4'b1100: value <= values[(4'b1100 + 1'b1) * 4'b0100: 4'b1100 * 4'b0100];
-		4'b1101: value <= values[(4'b1101 + 1'b1) * 4'b0100: 4'b1101 * 4'b0100];
-		4'b1110: value <= values[(4'b1110 + 1'b1) * 4'b0100: 4'b1110 * 4'b0100];
-		4'b1111: value <= values[(4'b1111 + 1'b1) * 4'b0100: 4'b1111 * 4'b0100];
+		/*
+		
+		4'b0000: value <= values[(4'b0000 + 1'b1) * 4: 4'b0000 * 4];
+		4'b0001: value <= values[(4'b0001 + 1'b1) * 4: 4'b0001 * 4];
+		4'b0010: value <= values[(4'b0010 + 1'b1) * 4: 4'b0010 * 4];
+		4'b0011: value <= values[(4'b0011 + 1'b1) * 4: 4'b0011 * 4];
+		4'b0100: value <= values[(4'b0100 + 1'b1) * 4: 4'b0100 * 4];
+		4'b0101: value <= values[(4'b0101 + 1'b1) * 4: 4'b0101 * 4];
+		4'b0110: value <= values[(4'b0110 + 1'b1) * 4: 4'b0110 * 4];
+		4'b0111: value <= values[(4'b0111 + 1'b1) * 4: 4'b0111 * 4];
+		4'b1000: value <= values[(4'b1000 + 1'b1) * 4: 4'b1000 * 4];
+		4'b1001: value <= values[(4'b1001 + 1'b1) * 4: 4'b1001 * 4];
+		4'b1010: value <= values[(4'b1010 + 1'b1) * 4: 4'b1010 * 4];
+		4'b1011: value <= values[(4'b1011 + 1'b1) * 4: 4'b1011 * 4];
+		4'b1100: value <= values[(4'b1100 + 1'b1) * 4: 4'b1100 * 4];
+		4'b1101: value <= values[(4'b1101 + 1'b1) * 4: 4'b1101 * 4];
+		4'b1110: value <= values[(4'b1110 + 1'b1) * 4: 4'b1110 * 4];
+		4'b1111: value <= values[(4'b1111 + 1'b1) * 4: 4'b1111 * 4];*/
+		4'b0000: value <= values[63: 60];
+		4'b0001: value <= values[59: 56];
+		4'b0010: value <= values[55: 52];
+		4'b0011: value <= values[51: 48];
+		4'b0100: value <= values[47: 44];
+		4'b0101: value <= values[43: 40];
+		4'b0110: value <= values[39: 36];
+		4'b0111: value <= values[35: 32];
+		4'b1000: value <= values[31: 28];
+		4'b1001: value <= values[27: 24];
+		4'b1010: value <= values[23: 20];
+		4'b1011: value <= values[19: 16];
+		4'b1100: value <= values[15: 12];
+		4'b1101: value <= values[11: 8];
+		4'b1110: value <= values[7: 4];
+		4'b1111: value <= values[3: 0];
 		endcase
 	end
 	
@@ -48,7 +66,7 @@ module draw_grid(reset, clock, values, x, y, colour);
 			clock_y = 1'b0;
 	end
 	
-	//counterX counts from 0 to 14
+	//counterX counts from 1 to 15
 	counterX c1(clock, reset, 1'b1, xcount);
 	//counterY counts from 0 to 14
 	counterY c2(clock_y, reset, 1'b1, ycount);
@@ -65,10 +83,10 @@ module counterX(clock, reset, enable, q);
 		always @(posedge clock)
 		begin
 			if(reset == 1'b1)
-				q <= 4'b0000;
+				q <= 4'b0001;
 			else if(enable == 1'b1)
 			begin
-			   if ( q == 4'b1110 )
+			   if ( q == 4'b1111 )
 					q <= 4'b0000;
 				else
 					q <= q + 1'b1;
@@ -129,7 +147,7 @@ module analyze(value, xcount, ycount, boxcount, X, Y, colour);
 			4'b0000: 
 				colour <= 3'b100;
 			4'b0001:
-				if(((xcount == 4'0111 || xcount ==  4'b1000 || xcount ==  4'b1001 || xcount ==  4'b1010) && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1010)) || 
+				if(((xcount == 4'b0111 || xcount ==  4'b1000 || xcount ==  4'b1001 || xcount ==  4'b1010) && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1010)) || 
 					(xcount ==  4'b0111 && ycount ==  4'b1001) || (xcount ==  4'b1010 && ycount ==  4'b0111))
 					colour <= 3'b111;
 				else
@@ -157,7 +175,7 @@ module analyze(value, xcount, ycount, boxcount, X, Y, colour);
 				if(((xcount == 4'b0101 || xcount == 4'b0110 || xcount ==  4'b1010) && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1010)) || 
 					(xcount ==  4'b0111 && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)) || 
 					(xcount ==  4'b1001 && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)) ||
-					(xcount == 4'b00011 && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000 || ycount ==  4'b1010)))
+					(xcount == 4'b1011 && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000 || ycount ==  4'b1010)))
 					colour <= 3'b111;
 				else
 					colour <= 3'b100;
@@ -189,7 +207,7 @@ module analyze(value, xcount, ycount, boxcount, X, Y, colour);
 			4'b1001:
 				if(((xcount == 4'b0011 || xcount == 4'b0100 || xcount ==  4'b1101 || xcount ==  4'b1110) && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1010)) ||
 					(xcount ==  4'b1001 && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)) || 
-					((xcount == 4'b0010 || xcount ==  4'b1111) && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)) || 
+					((xcount == 4'b0010 || xcount ==  4'b1111) && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000 || ycount ==  4'b1010)) || 
 					((xcount == 4'b0101 || xcount ==  4'b1100) && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)))
 					colour <= 3'b111;
 				else
@@ -206,7 +224,8 @@ module analyze(value, xcount, ycount, boxcount, X, Y, colour);
 				if((xcount == 4'b0001 && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)) || ((xcount == 4'b0010 || xcount ==  4'b1110) && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1010)) ||
 					(xcount == 4'b0011 && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000 || ycount ==  4'b1010)) ||
 					((xcount == 4'b0101 || xcount ==  4'b0111 || xcount ==  4'b1011 || xcount ==  4'b1101 || xcount ==  4'b1111) && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)) ||
-					(xcount ==  4'b1001 && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000)) || (xcount ==  4'b1010 && ycount ==  4'b1000))
+					(xcount ==  4'b1001 && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000)) || (xcount ==  4'b1010 && ycount ==  4'b1000) ||
+					(xcount == 4'b0110 && (ycount == 4'b0110 || ycount ==  4'b1010)))
 					colour <= 3'b111;
 				else
 					colour <= 3'b100;

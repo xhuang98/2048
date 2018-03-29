@@ -5,9 +5,9 @@ module box(data, enable, reset, clock, value);
 	
 	always @(posedge clock or posedge reset) 
 	begin
-		if(reset == 1)
+		if(reset == 1'b1)
 		begin
-			value <= 0;
+			value <= 4'b0000;
 		end
 		else
 		begin
