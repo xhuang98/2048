@@ -1,4 +1,4 @@
-module control(start, clock, direction, oldvalues, update, newvalues, endstatus);
+module control(start, clock, direction, oldvalues, update, newvalues, endstatus, current_state);
 	input start, clock;
 	input [3:0] direction;
 	input [16 * 4 - 1 : 0] oldvalues;
@@ -58,7 +58,8 @@ module control(start, clock, direction, oldvalues, update, newvalues, endstatus)
 	assign newvalues = {box1in, box2in, box3in, box4in, box5in, box6in, box7in, box8in, 
 				box9in, box10in, box11in, box12in, box13in, box14in, box15in, box16in};
 	
-	reg [2:0] current_state, next_state;
+	output reg [2:0] current_state; // temporary output
+	reg [2:0] next_state;
 	
 	localparam  INIT = 3'b101,
 				INIT2 = 3'b001, 

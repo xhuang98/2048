@@ -1,6 +1,7 @@
 module game2048(
 		// TODO: add keyboard
 		LEDR,
+		HEX0,
 		SW,							// temporary input
 		CLOCK_50,
 		VGA_CLK,   						//	VGA Clock
@@ -17,6 +18,7 @@ module game2048(
 	input 	[4:0]	SW;					// SW4 is start/reset, SW[3:0] is direction (up, down, left, right)
 	
 	output [1:0] LEDR;
+	output [6:0] HEX0;
 	//output: vga stuff:
 	output			VGA_CLK;   				//	VGA Clock      
 	output			VGA_HS;					//	VGA H_SYNC
@@ -62,6 +64,7 @@ module game2048(
 	wire [3:0] direction;
 	wire [6:0] x, y; // x: 57-123; y: 27-93.
 	wire [2:0] colour; // white (111) for numbers, red (100) for box
+	wire [2:0] state;
 	
 	assign clock = CLOCK_50;
 	// TODO: Assign keyboard to start
@@ -90,10 +93,40 @@ module game2048(
 	assign {box1in, box2in, box3in, box4in, box5in, box6in, box7in, box8in, box9in, box10in, box11in, box12in, box13in, box14in, box15in, box16in} = newvalues;
 	assign oldvalues = {box1out, box2out, box3out, box4out, box5out, box6out, box7out, box8out, box9out, box10out, box11out, box12out, box13out, box14out, box15out, box16out};
 	
-	control c0(start, clock, direction, oldvalues, enable, newvalues, endstatus);
+	control c0(start, clock, direction, oldvalues, enable, newvalues, endstatus, state);
 	
 	draw_grid d0(start, clock, oldvalues, x, y, colour);
 	
 	//resultdisplay r0(endstatus, x, y, colour);
 	assign LEDR[1:0] = endstatus;
+	
+	hex_decoder h0({1'b0,state}, HEX0);
+endmodule
+
+
+
+module hex_decoder(hex_digit, segments);
+    input [3:0] hex_digit;
+    output reg [6:0] segments;
+   
+    always @(*)
+        case (hex_digit)
+            4'h0: segments = 7'b100_0000;
+            4'h1: segments = 7'b111_1001;
+            4'h2: segments = 7'b010_0100;
+            4'h3: segments = 7'b011_0000;
+            4'h4: segments = 7'b001_1001;
+            4'h5: segments = 7'b001_0010;
+            4'h6: segments = 7'b000_0010;
+            4'h7: segments = 7'b111_1000;
+            4'h8: segments = 7'b000_0000;
+            4'h9: segments = 7'b001_1000;
+            4'hA: segments = 7'b000_1000;
+            4'hB: segments = 7'b000_0011;
+            4'hC: segments = 7'b100_0110;
+            4'hD: segments = 7'b010_0001;
+            4'hE: segments = 7'b000_0110;
+            4'hF: segments = 7'b000_1110;   
+            default: segments = 7'h7f;
+        endcase
 endmodule
