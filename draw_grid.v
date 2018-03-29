@@ -200,7 +200,7 @@ module analyze(value, xcount, ycount, boxcount, X, Y, colour);
 				if(((xcount == 4'b0011 || xcount == 4'b0100 || xcount ==  4'b1000 || xcount ==  4'b1001 || xcount ==  4'b1101 || xcount ==  4'b1110) && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1010)) || 
 					((xcount == 4'b0010 || xcount ==  4'b1010 || xcount ==  4'b1111) && (ycount == 4'b0110 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)) || 
 					((xcount == 4'b0101 || xcount ==  4'b0111) && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000 || ycount ==  4'b1010)) || 
-					(xcount ==  4'b1100 || (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)))
+					(xcount ==  4'b1100 && (ycount == 4'b0110 || ycount ==  4'b0111 || ycount ==  4'b1000 || ycount ==  4'b1001 || ycount ==  4'b1010)))
 					colour <= 3'b111;
 				else
 					colour <= 3'b100;
