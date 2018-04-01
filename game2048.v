@@ -3,6 +3,7 @@ module game2048(
 		LEDR,
 		HEX0,
 		HEX1,
+		KEY,
 		SW,							// temporary input
 		CLOCK_50,
 		VGA_CLK,   						//	VGA Clock
@@ -16,10 +17,11 @@ module game2048(
 		);
 	//input: arrow keys, s key (start)
 	input			CLOCK_50;				//	50 MHz
-	input 	[5:0]	SW;					// SW4 is start/reset, SW[3:0] is direction (up, down, left, right), SW5 is clock
+	input 	[1:0]	SW;					// SW0 is start/reset, 
+	input [3:0] KEY;						// KEY[3:0] is direction (up, down, left, right)
 	
 	output [1:0] LEDR;
-	output [6:0] HEX0, HEX1;
+	output [6:0] HEX0, HEX1;			// HEX0 is current state, HEX1 is next state
 	//output: vga stuff:
 	output			VGA_CLK;   				//	VGA Clock      
 	output			VGA_HS;					//	VGA H_SYNC
@@ -62,19 +64,28 @@ module game2048(
 	wire [3:0] box1in, box2in, box3in, box4in, box5in, box6in, box7in, box8in, box9in, box10in, box11in, box12in, box13in, box14in, box15in, box16in;
 	wire [3:0] box1out, box2out, box3out, box4out, box5out, box6out, box7out, box8out, box9out, box10out, box11out, box12out, box13out, box14out, box15out, box16out;
 	wire enable, clock, endstatus;
-	wire [3:0] direction;
+	reg [3:0] direction;
+	reg reset_n;
 	wire [6:0] x, y; // x: 57-123; y: 27-93.
 	wire [2:0] colour; // white (111) for numbers, red (100) for box
 	wire [2:0] state, n_state;
+	wire start2; // karim changed - return
+	wire clk; // karim changed - return
 	
-	assign clock = SW[5];
+	clockdelay2 c2(start, CLOCK_50, clock);
+	//assign clock = CLOCK_50;
+	
 	// TODO: Assign keyboard to start
-	assign start = SW[4];
+	assign start = SW[0];
 	// TODO: Assign keyboard values to direction
-	assign direction = SW[3:0];
+	always@(posedge ~KEY[0] or posedge ~KEY[1] or posedge ~KEY[2] or posedge ~KEY[3])
+		begin
+		direction <= ~KEY[3:0];
+		end
+	
 	
 	// start is reset
-	box b1(box1in, enable, start, clock, box1out);
+	box	b1(box1in, enable, start, clock, box1out);
 	box	b2(box2in, enable, start, clock, box2out);
 	box	b3(box3in, enable, start, clock, box3out);
 	box	b4(box4in, enable, start, clock, box4out);
@@ -94,9 +105,10 @@ module game2048(
 	assign {box1in, box2in, box3in, box4in, box5in, box6in, box7in, box8in, box9in, box10in, box11in, box12in, box13in, box14in, box15in, box16in} = newvalues;
 	assign oldvalues = {box1out, box2out, box3out, box4out, box5out, box6out, box7out, box8out, box9out, box10out, box11out, box12out, box13out, box14out, box15out, box16out};
 	
-	control c0(start, clock, direction, oldvalues, enable, newvalues, endstatus, state, n_state);
+	control c0(start, clock, direction, oldvalues, enable, newvalues, endstatus, state, n_state); 
 	
-	draw_grid d0(start, clock, oldvalues, x, y, colour);
+	draw_grid d0(start, CLOCK_50, oldvalues, x, y, colour);
+	
 	
 	//resultdisplay r0(endstatus, x, y, colour);
 	assign LEDR[1:0] = endstatus;
@@ -131,4 +143,25 @@ module hex_decoder(hex_digit, segments);
             4'hF: segments = 7'b000_1110;   
             default: segments = 7'h7f;
         endcase
+endmodule
+
+
+module clockdelay2(reset, clock, clk);
+	input clock, reset;
+	output reg clk;
+	reg 	[13:0] 	q;
+	
+	always @(posedge clock) 
+		begin
+		if(reset)
+			q <= 14'b00000000000000;
+		else if(q == 14'b11111111111111)
+			q <= 14'b00000000000000;
+		else q <= q + 1'b1;
+		end
+   
+    always@(*)
+    begin
+		clk <= (q == 14'b11111111111111)? 1'b1: 1'b0;
+    end
 endmodule
