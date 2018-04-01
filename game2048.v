@@ -16,7 +16,7 @@ module game2048(
 		);
 	//input: arrow keys, s key (start)
 	input			CLOCK_50;				//	50 MHz
-	input 	[4:0]	SW;					// SW4 is start/reset, SW[3:0] is direction (up, down, left, right)
+	input 	[5:0]	SW;					// SW4 is start/reset, SW[3:0] is direction (up, down, left, right), SW5 is clock
 	
 	output [1:0] LEDR;
 	output [6:0] HEX0, HEX1;
@@ -67,7 +67,7 @@ module game2048(
 	wire [2:0] colour; // white (111) for numbers, red (100) for box
 	wire [2:0] state, n_state;
 	
-	assign clock = CLOCK_50;
+	assign clock = SW[5];
 	// TODO: Assign keyboard to start
 	assign start = SW[4];
 	// TODO: Assign keyboard values to direction
