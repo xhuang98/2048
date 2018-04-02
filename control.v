@@ -78,14 +78,24 @@ module control(start, clock, direction, oldvalues, update, newvalues, endstatus,
 			else if(endstatus != 2'b00)
 				next_state = END;
 			else
-				next_state = (posedge |direction)? MOVE: WAIT;
+				next_state = WAIT;
 			end
 			MOVE: next_state = WAIT;
 			END: next_state = start? INIT2: END;
 			default: next_state = INIT2;
 		endcase
-	end
+		@(posedge move_indicator)
+		begin
+		if(current_state == WAIT)
+			next_state = MOVE;
+		end
 	
+	end
+
+wire move_indicator;
+assign move_indicator = |direction;	
+	
+
 	always@(posedge clock) // current state operation signals
 	begin
 		update_inside <= 1'b0;
