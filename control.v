@@ -1,5 +1,5 @@
-module control(start, clock, direction, oldvalues, update, newvalues, endstatus, current_state, next_state);
-	input start, clock;
+module control(reset start, clock, direction, oldvalues, update, newvalues, endstatus, current_state, next_state);
+	input start, clock, reset;
 	input [3:0] direction;
 	input [16 * 4 - 1 : 0] oldvalues;
 	output [16 * 4 - 1 : 0] newvalues;
@@ -36,7 +36,7 @@ module control(start, clock, direction, oldvalues, update, newvalues, endstatus,
 	end
 	
 	
-	variable_counter v0(start, clock, random1);
+	variable_counter v0(reset, clock, random1);
 			
 	
 	assign win = ((box1out == 4'b1011) || (box2out == 4'b1011) || (box3out == 4'b1011 ) || ( box4out == 4'b1011 ) || 
@@ -69,7 +69,7 @@ module control(start, clock, direction, oldvalues, update, newvalues, endstatus,
 	always@(*) // update next state
 	begin
 		case(current_state)
-			INIT: next_state = start? INIT2: INIT;
+			INIT: next_state = INIT2;
 			INIT2: next_state = start? INIT2: WAIT;
 			WAIT: 
 			begin
@@ -78,24 +78,33 @@ module control(start, clock, direction, oldvalues, update, newvalues, endstatus,
 			else if(endstatus != 2'b00)
 				next_state = END;
 			else
-				next_state = (posedge |direction)? MOVE: WAIT;
+				next_state = WAIT;
 			end
 			MOVE: next_state = WAIT;
-			END: next_state = start? INIT2: END;
-			default: next_state = INIT2;
+			END: next_state = start? INIT: END;
+			default: next_state = INIT;
 		endcase
+		
+		@(posedge |direction)
+		begin
+		if(current_state == WAIT)
+			next_state = MOVE;
+		end
 	end
 	
 	always@(posedge clock) // current state operation signals
 	begin
 		update_inside <= 1'b0;
-		enable_givenum <= 1'b0;
+		//enable_givenum <= 1'b0;
 		enable_move <= 1'b0;
 		case(current_state)
-			//INIT: do nothing?
+			INIT:
+				begin
+				enable_givenum <= enable_givenum? 1'b0: 1'b1;
+				end
 			INIT2: 
 				begin
-				enable_givenum <= 1'b1;
+				enable_givenum <= 1'b0;
 				enable_move <= 1'b0;
 				box1in <= box1_firin;
 				box2in <= box2_firin;
@@ -163,15 +172,21 @@ module control(start, clock, direction, oldvalues, update, newvalues, endstatus,
 	end
 	assign update = update_inside;
 	
-	clockdelay c1(clock, ~start, 1'b1, clk);
+	clockdelay c1(clock, ~reset, 1'b1, clk);
 	
 	// Update current state
 	always@(posedge clk)
     begin
         if(start)
+			begin
             current_state <= INIT2;
+			end
         else
+			begin
             current_state <= next_state;
+			end
+	@(reset)
+		current_state <= INIT;
     end
 	
 	always@(*) // check for win/lose
@@ -204,15 +219,15 @@ endmodule
 module clockdelay(clock, reset_n, enable, clk);
 	input clock, reset_n, enable;
 	output reg clk;
-	reg 	[1:0] 	q;
+	reg 	[2:0] 	q;
 	
 	always @(posedge clock) begin
 		if(reset_n == 1'b0)
-			q <= 2'b00;
+			q <= 3'b000;
 		else if (enable == 1'b1)
 		begin
-		  if (q == 2'b11)
-			  q <= 2'b00;
+		  if (q == 3'b111)
+			  q <= 3'b000;
 		  else
 			  q <= q + 1'b1;
 		end
@@ -220,6 +235,6 @@ module clockdelay(clock, reset_n, enable, clk);
    
     always@(*)
     begin
-		clk <= (q == 2'b11)? 1'b1: 1'b0;
+		clk <= (q == 3'b111)? 1'b1: 1'b0;
     end
 endmodule
