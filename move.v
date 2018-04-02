@@ -1828,7 +1828,7 @@ module FF(t, clock, reset, q);
       end
       else
       begin
-         q <= d;
+         q <= t;
       end
    end
 endmodule
