@@ -26,7 +26,7 @@ module move_below(o1,o2,o3,o4,o5,o6,o7,o8,o9,o10,o11,o12,o13,o14,o15,o16,NSQ1,NS
 	o16,qt1,qt2,qt3,qt4,qt5,qt6,qt7,qt8,qt9,qt10,qt11,qt12,qt13,qt14,qt15,qt16, clock_iner,real_movemen_t, real_movement[1:0]);
 	state_final s1(.CLOCK_IN(clock_iner), .randomnumber_generated(random_number_in),.CONTROL(real_movemen_t), .SQ1(qt1), .SQ2(qt2),.SQ3(qt3),.SQ4(qt4),.SQ5(qt5),.SQ6(qt6),.SQ7(qt7),.SQ8(qt8),.SQ9(qt9),.SQ10(qt10),.SQ11(qt11),.SQ12(qt12),.SQ13(qt13),.SQ14(qt14),.SQ15(qt15),.SQ16(qt16), .NSQ1(q1),.NSQ2(q2),.NSQ3(q3),.NSQ4(q4),.NSQ5(q5),.NSQ6(q6),.NSQ7(q7),.NSQ8(q8),.NSQ9(q9),.NSQ10(q10),.NSQ11(q11),.NSQ12(q12),.NSQ13(q13),.NSQ14(q14),.NSQ15(q15),.NSQ16(q16), .mux_ind(muxer));
 	
-	always @(posedge clock_iner)
+	always @(*)
 		begin
 			case(real_movemen_t)
 				0:begin
@@ -96,7 +96,7 @@ module move_final (SQ1, SQ2,SQ3,SQ4,SQ5,SQ6,SQ7,SQ8,SQ9,SQ10,SQ11,SQ12,SQ13,SQ14
 	move_up m1(.old_box1(SQ1),.old_box2(SQ2),.old_box3(SQ3),.old_box4(SQ4),.old_box5(SQ5),.old_box6(SQ6),.old_box7(SQ7),.old_box8(SQ8),.old_box9(SQ9),.old_box10(SQ10),.old_box11(SQ11),.old_box12(SQ12),.old_box13(SQ13),.old_box14(SQ14),.old_box15(SQ15),
 	.old_box16(SQ16),.newbox1(S1), .newbox2(S2),.newbox3(S3),.newbox4(S4),.newbox5(S5),.newbox6(S6),.newbox7(S7),.newbox8(S8),.newbox9(S9),.newbox10(S10),.newbox11(S11),.newbox12(S12),.newbox13(S13),.newbox14(S14),.newbox15(S15),.newbox16(S16), .clock_in(CLOCK_IN), .movement(MOVER));
 	
-	always @(posedge CLOCK_IN)
+	always @(*)
 		begin
 			case(CONTROL)
 				0:begin
@@ -215,7 +215,7 @@ module move_up(old_box1,old_box2,old_box3,old_box4,old_box5,old_box6,old_box7,ol
 	block_adder thirdrow_adder10(.r1(up9), .r2(up10), .r3(up11), .r4(up12),.clock(clock_in), .b1(up_temp9), .b2(up_temp10), .b3(up_temp11), .b4(up_temp12));
 	block_adder fourthrow_adder11(.r1(up13), .r2(up14), .r3(up15), .r4(up16),.clock(clock_in), .b1(up_temp13), .b2(up_temp14), .b3(up_temp15), .b4(up_temp16));
 	
-	always @(posedge clock_in)
+	always @(*)
 	begin
 		case(movement)
 			0: begin
@@ -554,7 +554,7 @@ module state_final (CLOCK_IN, randomnumber_generated,CONTROL, SQ1, SQ2,SQ3,SQ4,S
 	.b16(SQ16),.bart1(S1), .bart2(S2),.bart3(S3),.bart4(S4),.bart5(S5),.bart6(S6),
 	.bart7(S7),.bart8(S8),.bart9(S9),.bart10(S10),.bart11(S11),.bart12(S12),.bart13(S13),.bart14(S14),.bart15(S15),.bart16(S16), .select(mux_ind), .clock_inner(CLOCK_IN));
 	
-	always @(posedge CLOCK_IN)
+	always @(*)
 		begin
 			case(CONTROL)
 				0:begin
@@ -633,7 +633,7 @@ module state_below(clock_inner, outvalue, b1, b2, b3,b4,b5,b6,b7,b8,b9,b10,b11,b
 	
 	assign select = {mux_other, mux_rand};
 	
-	always@(posedge clock_inner)
+	always@(*)
 	begin
 		case(select)
 			0: begin
@@ -737,7 +737,7 @@ module random_number_grabber(clock, randombox,box1, box2, box3,box4,box5,box6,bo
 	output muxy;
 	input clock;
 	
-	always@(posedge clock)
+	always@(*)
 		begin
 			case(randombox)
 				0: begin
@@ -1440,7 +1440,7 @@ module other_checker (box1,clock, box2, box3,box4,box5,box6,box7,box8,box9,box10
 	reg q;
 	input clock;
 	output mux_other;
-	always@(posedge clock)
+	always@(*)
 		begin
 			if (box1 == 4'b0000)
 			begin
@@ -1814,23 +1814,6 @@ module other_checker (box1,clock, box2, box3,box4,box5,box6,box7,box8,box9,box10
 		assign boxy14=qt14;
 		assign boxy15=qt15;
 		assign boxy16=qt16;
-endmodule
-
-module FF(t, clock, reset, q);
-   input [3:0] t;
-	input clock, reset;
-   output reg [3:0] q;   
-   always @ (posedge clock) //regular d flip flop
-   begin
-      if(reset == 1'b0)
-      begin
-         q <= 4'b0000;
-      end
-      else
-      begin
-         q <= t;
-      end
-   end
 endmodule
 
 
