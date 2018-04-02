@@ -72,7 +72,7 @@ module game2048(
 	wire start2; // karim changed - return
 	wire clk; // karim changed - return
 	
-	clockdelay2 c2(start, CLOCK_50, clock);
+	clockdelay2 c2(SW[1], CLOCK_50, clock);
 	//assign clock = CLOCK_50;
 	
 	// TODO: Assign keyboard to start

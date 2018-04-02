@@ -78,7 +78,7 @@ module control(start, clock, direction, oldvalues, update, newvalues, endstatus,
 			else if(endstatus != 2'b00)
 				next_state = END;
 			else
-				next_state = (direction != 4'b0000)? MOVE: WAIT;
+				next_state = (posedge |direction)? MOVE: WAIT;
 			end
 			MOVE: next_state = WAIT;
 			END: next_state = start? INIT2: END;
