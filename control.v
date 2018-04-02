@@ -1,4 +1,4 @@
-module control(reset start, clock, direction, oldvalues, update, newvalues, endstatus, current_state, next_state);
+module control(reset, start, clock, direction, oldvalues, update, newvalues, endstatus, current_state, next_state);
 	input start, clock, reset;
 	input [3:0] direction;
 	input [16 * 4 - 1 : 0] oldvalues;
@@ -177,16 +177,14 @@ module control(reset start, clock, direction, oldvalues, update, newvalues, ends
 	// Update current state
 	always@(posedge clk)
     begin
-        if(start)
+        if(start | reset)
 			begin
-            current_state <= INIT2;
+            current_state <= INIT;
 			end
         else
 			begin
             current_state <= next_state;
 			end
-	@(reset)
-		current_state <= INIT;
     end
 	
 	always@(*) // check for win/lose
