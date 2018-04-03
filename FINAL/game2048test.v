@@ -14,7 +14,8 @@ module game2048(
 	wire [16 * 4 - 1 : 0] oldvalues;
 	wire [3:0] box1in, box2in, box3in, box4in, box5in, box6in, box7in, box8in, box9in, box10in, box11in, box12in, box13in, box14in, box15in, box16in;
 	wire [3:0] box1out, box2out, box3out, box4out, box5out, box6out, box7out, box8out, box9out, box10out, box11out, box12out, box13out, box14out, box15out, box16out;
-	wire enable, clock, endstatus;
+	wire enable, clock;
+	wire [1:0] endstatus;
 	reg [3:0] direction;
 	reg reset_n;
 
