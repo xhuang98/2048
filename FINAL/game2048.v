@@ -90,7 +90,7 @@ module game2048(
 	/*if (countdown == 0 || countdown == 1) // <- second option if one clock cycle doesn't work
 		direction <= ~KEY[3:0];*/
 	else
-		direction <= 4'b0000; // direction only lasts one clock cycle (maybe too short?)
+		direction <= 4'b0000; // direction only lasts one clock cycle (maybe too short? states in control change every 2 clock cycles)
 	end
 	
 	
