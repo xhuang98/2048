@@ -78,9 +78,8 @@ module control(reset, start, clock, direction, oldvalues, update, newvalues, end
 				next_state = INIT2;
 			else if(endstatus != 2'b00)
 				next_state = END;
-			/*else if(direction != 4'b0000) begin
+			else if(direction != 4'b0000) 
 				next_state = MOVE;
-				direction = 4'b0000; end*/
 			else
 				next_state = WAIT;
 			end
@@ -91,10 +90,11 @@ module control(reset, start, clock, direction, oldvalues, update, newvalues, end
 		
 	end
 
-	always@(posedge dir) begin
+/*	always@(posedge dir) begin
 			if(current_state == WAIT)	
 				next_state = MOVE; 
 		end
+		*/
 
 	
 	always@(*) // current state operation signals

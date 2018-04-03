@@ -63,7 +63,7 @@ module game2048(
 	wire [16 * 4 - 1 : 0] oldvalues;
 	wire [3:0] box1in, box2in, box3in, box4in, box5in, box6in, box7in, box8in, box9in, box10in, box11in, box12in, box13in, box14in, box15in, box16in;
 	wire [3:0] box1out, box2out, box3out, box4out, box5out, box6out, box7out, box8out, box9out, box10out, box11out, box12out, box13out, box14out, box15out, box16out;
-	wire enable, clock;
+	wire enable, clock, key_clock;
 	wire [1:0] endstatus;
 	reg [3:0] direction;
 	reg reset_n;
@@ -80,11 +80,16 @@ module game2048(
 	clockdelay2 c2(reset, CLOCK_50, clock);
 	//assign clock = CLOCK_50;
 	
+	keyboardclk k0(reset, CLOCK_50, key_clock);
 
 	// TODO: Assign keyboard values to direction
-	always@(posedge ~KEY[0] or posedge ~KEY[1] or posedge ~KEY[2] or posedge ~KEY[3])
+	always@(posedge key_clock, negedge &KEY[3:0])
 		begin
 		direction <= ~KEY[3:0];
+	@(posedge clock)
+		begin
+		direction <= 4'b0000;
+		end
 		end
 	
 	
@@ -166,5 +171,26 @@ module clockdelay2(reset, clock, clk);
     always@(*)
     begin
 		clk <= (q == 14'b11111111111111)? 1'b1: 1'b0;
+    end
+endmodule
+
+
+module keyboardclk(reset, clock, clk);
+	input clock, reset;
+	output reg clk;
+	reg 	[13:0] 	q;
+	
+	always @(posedge clock) 
+		begin
+		if(reset)
+			q <= 24'd12499999; // resets every quarter second
+		else if(q == 0)
+			q <= 24'd12499999;
+		else q <= q - 1'b1;
+		end
+   
+    always@(*)
+    begin
+		clk <= (q == 0)? 1'b1: 1'b0;
     end
 endmodule
