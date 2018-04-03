@@ -63,10 +63,10 @@ module game2048(
 	wire [16 * 4 - 1 : 0] oldvalues;
 	wire [3:0] box1in, box2in, box3in, box4in, box5in, box6in, box7in, box8in, box9in, box10in, box11in, box12in, box13in, box14in, box15in, box16in;
 	wire [3:0] box1out, box2out, box3out, box4out, box5out, box6out, box7out, box8out, box9out, box10out, box11out, box12out, box13out, box14out, box15out, box16out;
-	wire enable, clock, key_clock;
+	wire enable, clock;
+	wire [24:0] countdown; // Reads keyboard input every 0.5 seconds
 	wire [1:0] endstatus;
 	reg [3:0] direction;
-	reg reset_n;
 	wire [6:0] x, y; // x: 57-123; y: 27-93.
 	wire [2:0] colour; // white (111) for numbers, red (100) for box
 	wire [2:0] state, n_state;
@@ -80,17 +80,18 @@ module game2048(
 	clockdelay2 c2(reset, CLOCK_50, clock);
 	//assign clock = CLOCK_50;
 	
-	keyboardclk k0(reset, CLOCK_50, key_clock);
+	keyboardctrl k0(reset, CLOCK_50, countdown);
 
 	// TODO: Assign keyboard values to direction
-	always@(posedge key_clock, negedge &KEY[3:0])
-		begin
+	always@(posedge clock)
+	begin
+	if (countdown == 0)
 		direction <= ~KEY[3:0];
-	@(posedge clock)
-		begin
-		direction <= 4'b0000;
-		end
-		end
+	/*if (countdown == 0 || countdown == 1) // <- second option if one clock cycle doesn't work
+		direction <= ~KEY[3:0];*/
+	else
+		direction <= 4'b0000; // direction only lasts one clock cycle (maybe too short?)
+	end
 	
 	
 	// start or reset reset boxes
@@ -175,22 +176,16 @@ module clockdelay2(reset, clock, clk);
 endmodule
 
 
-module keyboardclk(reset, clock, clk);
+module keyboardctrl(reset, clock, q);
 	input clock, reset;
-	output reg clk;
-	reg 	[13:0] 	q;
+	output reg 	[24:0] 	q;
 	
-	always @(posedge clock) 
+	always @(posedge clock, posedge reset) 
 		begin
 		if(reset)
-			q <= 24'd12499999; // resets every quarter second
+			q <= 25'd24999999; 
 		else if(q == 0)
-			q <= 24'd12499999;
+			q <= 25'd24999999; // resets every half second
 		else q <= q - 1'b1;
 		end
-   
-    always@(*)
-    begin
-		clk <= (q == 0)? 1'b1: 1'b0;
-    end
 endmodule
