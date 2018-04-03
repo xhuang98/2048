@@ -17,20 +17,30 @@ module game2048(
 	wire enable, clock;
 	wire [1:0] endstatus;
 	reg [3:0] direction;
-	reg reset_n;
+	//reg reset_n;
+	wire [4:0] countdown; 
 
 	wire [2:0] state, n_state;
 	
-	// TODO: Assign keyboard to start
-	//assign start = SW[0];
-	//assign reset = SW[1];
+
+	assign start = SW[0];
+	assign reset = SW[1];
 	
 	assign reset_boxes = (start || reset);
+	assign clock = CLOCK_50;
 	
-	//clockdelay2 c2(reset, CLOCK_50, clock);
-	//assign clock = CLOCK_50;
-	
-	
+	keyboardctrl k0(reset, CLOCK_50, countdown);
+
+
+	always@(posedge clock)
+	begin
+	if (countdown == 0)
+		direction <= ~KEY[3:0];
+	/*if (countdown == 0 || countdown == 1) // <- second option if one clock cycle doesn't work
+		direction <= ~KEY[3:0];*/
+	else
+		direction <= 4'b0000; // direction only lasts one clock cycle (maybe too short? states in control change every 2 clock cycles)
+	end
 	
 	// start or reset reset boxes
 	box	b1(box1in, enable, reset_boxes, clock, box1out);
@@ -58,4 +68,17 @@ module game2048(
 endmodule
 
 
+module keyboardctrl(reset, clock, q);
+	input clock, reset;
+	output reg 	[4:0] 	q;
+	
+	always @(posedge clock, posedge reset) 
+		begin
+		if(reset)
+			q <= 5'd15; 
+		else if(q == 0)
+			q <= 5'd15; // resets every 16 cycles
+		else q <= q - 1'b1;
+		end
+endmodule
 
