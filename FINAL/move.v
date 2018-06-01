@@ -210,11 +210,17 @@ module move_up(old_box1,old_box2,old_box3,old_box4,old_box5,old_box6,old_box7,ol
 	block_shifter thirdrow_shift10(.r1(old_box3), .r2(old_box7), .r3(old_box11), .r4(old_box15), .clock(clock_in), .b1(up9), .b2(up10),.b3(up11), .b4(up12));
 	block_shifter fourthrow_shift11(.r1(old_box4), .r2(old_box8), .r3(old_box12), .r4(old_box16), .clock(clock_in), .b1(up13), .b2(up14),.b3(up15), .b4(up16));
 	
+	
 	block_adder firstrow_adder8(.r1(up1), .r2(up2), .r3(up3), .r4(up4),.clock(clock_in), .b1(up_temp1), .b2(up_temp2), .b3(up_temp3), .b4(up_temp4));
 	block_adder secondrow_adder9(.r1(up5), .r2(up6), .r3(up7), .r4(up8),.clock(clock_in), .b1(up_temp5), .b2(up_temp6), .b3(up_temp7), .b4(up_temp8));
 	block_adder thirdrow_adder10(.r1(up9), .r2(up10), .r3(up11), .r4(up12),.clock(clock_in), .b1(up_temp9), .b2(up_temp10), .b3(up_temp11), .b4(up_temp12));
 	block_adder fourthrow_adder11(.r1(up13), .r2(up14), .r3(up15), .r4(up16),.clock(clock_in), .b1(up_temp13), .b2(up_temp14), .b3(up_temp15), .b4(up_temp16));
-	
+	/*
+	block_adder firstrow_adder8(.r1(up4), .r2(up3), .r3(up2), .r4(up1),.clock(clock_in), .b1(up_temp1), .b2(up_temp2), .b3(up_temp3), .b4(up_temp4));
+	block_adder secondrow_adder9(.r1(up8), .r2(up7), .r3(up6), .r4(up5),.clock(clock_in), .b1(up_temp5), .b2(up_temp6), .b3(up_temp7), .b4(up_temp8));
+	block_adder thirdrow_adder10(.r1(up12), .r2(up11), .r3(up10), .r4(up9),.clock(clock_in), .b1(up_temp9), .b2(up_temp10), .b3(up_temp11), .b4(up_temp12));
+	block_adder fourthrow_adder11(.r1(up16), .r2(up15), .r3(up14), .r4(up13),.clock(clock_in), .b1(up_temp13), .b2(up_temp14), .b3(up_temp15), .b4(up_temp16));
+	*/
 	always @(*)
 	begin
 		case(movement)
@@ -239,6 +245,23 @@ module move_up(old_box1,old_box2,old_box3,old_box4,old_box5,old_box6,old_box7,ol
 				end
 			1: begin
 				//=>
+				newbo1<= r_temp4;
+				newbo2 <= r_temp3;
+				newbo3 <= r_temp2;
+				newbo4 <= r_temp1;
+				newbo5 <= r_temp8;
+				newbo6 <= r_temp7;
+				newbo7 <= r_temp6;
+				newbo8 <= r_temp5;
+				newbo9 <= r_temp12;
+				newbo10 <= r_temp11;
+				newbo11 <= r_temp10;
+				newbo12 <= r_temp9;
+				newbo13 <= r_temp16;
+				newbo14 <= r_temp15;
+				newbo15<= r_temp14;
+				newbo16 <= r_temp13;
+				/*
 				newbo4 <= r_temp1;
 				newbo3 <= r_temp2;
 				newbo2 <= r_temp3;
@@ -255,6 +278,7 @@ module move_up(old_box1,old_box2,old_box3,old_box4,old_box5,old_box6,old_box7,ol
 				newbo15 <= r_temp14;
 				newbo14<= r_temp15;
 				newbo13 <= r_temp16;
+				*/
 				end
 			2: begin
 				//down
@@ -277,6 +301,7 @@ module move_up(old_box1,old_box2,old_box3,old_box4,old_box5,old_box6,old_box7,ol
 				end
 			3: begin
 				//up
+				/*
 				newbo1 <= up_temp1;
 				newbo5 <= up_temp2;
 				newbo9 <= up_temp3;
@@ -293,6 +318,25 @@ module move_up(old_box1,old_box2,old_box3,old_box4,old_box5,old_box6,old_box7,ol
 				newbo8 <= up_temp14;
 				newbo12 <= up_temp15;
 				newbo16 <= up_temp16;
+				*/
+
+				newbo1 <= up_temp1;
+				newbo2 <= up_temp5;
+				newbo3 <= up_temp9;
+				newbo4 <= up_temp13;
+				newbo5 <= up_temp2;
+				newbo6 <= up_temp6;
+				newbo7 <= up_temp10;
+				newbo8 <= up_temp14;
+				newbo9 <= up_temp3;
+				newbo10 <= up_temp7;
+				newbo11 <= up_temp11;
+				newbo12 <= up_temp15;
+				newbo13 <= up_temp4;
+				newbo14 <= up_temp8;
+				newbo15 <= up_temp12;
+				newbo16 <= up_temp16;
+
 				end
 		endcase
 	end
@@ -443,14 +487,14 @@ module block_adder(r1, r2, r3, r4,clock, b1, b2, b3, b4);
 			begin
 				if (r1==r2 & r3 == r4)  //s1,s1, s2,s2
 					begin
-					new_box1 <= r1+r2;
-					new_box2 <= r3+r4;
+					new_box1 <= r1+4'b0001;
+					new_box2 <= r3+4'b0001;
 					new_box3 <= 4'b0000;
 					new_box4 <= 4'b0000;
 					end
 				else if (r1==r2 & r3!=r4) // s,s,ns/s,ns   
 					begin
-					new_box1 <= r1+r2;
+					new_box1 <= r1+4'b0001;
 					new_box2 <= r3;
 					new_box3 <= r4;
 					new_box4 <= 4'b0000;
@@ -465,7 +509,7 @@ module block_adder(r1, r2, r3, r4,clock, b1, b2, b3, b4);
 				else if (r1!=r2 & r2==r3) //ns,s,s, ns/s
 					begin
 					new_box1 <= r1;
-					new_box2 <= r2+r3;
+					new_box2 <= r2+4'b0001;
 					new_box3 <= r4;
 					new_box4 <= 4'b0000;
 					end
@@ -473,7 +517,7 @@ module block_adder(r1, r2, r3, r4,clock, b1, b2, b3, b4);
 					begin
 					new_box1 <= r1;
 					new_box2 <= r2;
-					new_box3 <= r3+r4;
+					new_box3 <= r3+4'b0001;
 					new_box4 <= 4'b0000;
 					end
 			end
@@ -481,7 +525,7 @@ module block_adder(r1, r2, r3, r4,clock, b1, b2, b3, b4);
 			begin
 				if (r1 == r2) // s,s,s/ns,0
 					begin
-					new_box1 <= r1+r2;
+					new_box1 <= r1+4'b0001;
 					new_box2 <= r3;
 					new_box3 <= 4'b0000;
 					new_box4 <= 4'b0000;
@@ -489,7 +533,7 @@ module block_adder(r1, r2, r3, r4,clock, b1, b2, b3, b4);
 				else if (r1!=r2 & r2==r3) // ns,s,s   
 					begin
 					new_box1 <= r1;
-					new_box2 <= r2+r3;
+					new_box2 <= r2+4'b0001;
 					new_box3 <= 4'b0000;
 					new_box4 <= 4'b0000;
 					end
@@ -505,7 +549,7 @@ module block_adder(r1, r2, r3, r4,clock, b1, b2, b3, b4);
 			begin
 				if (r1 == r2) // s,s,0,0
 					begin
-					new_box1 <= r1+r2;
+					new_box1 <= r1+4'b0001;
 					new_box2 <= 4'b0000;
 					new_box3 <= 4'b0000;
 					new_box4 <= 4'b0000;

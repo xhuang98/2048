@@ -20,7 +20,7 @@ module game2048(
 	input 	[1:0]	SW;					// SW0 is start, SW1 is reset
 	input [3:0] KEY;						// KEY[3:0] is direction (up, down, left, right)
 	
-	output [1:0] LEDR;
+	output [9:0] LEDR;
 	output [6:0] HEX0, HEX1;			// HEX0 is current state, HEX1 is next state
 	//output: vga stuff:
 	output			VGA_CLK;   				//	VGA Clock      
@@ -66,7 +66,7 @@ module game2048(
 	wire enable, clock;
 	wire [24:0] countdown; // Reads keyboard input every 0.5 seconds
 	wire [1:0] endstatus;
-	reg [3:0] direction;
+	wire [3:0] direction;
 	wire [6:0] x, y; // x: 57-123; y: 27-93.
 	wire [2:0] colour; // white (111) for numbers, red (100) for box
 	wire [2:0] state, n_state;
@@ -77,22 +77,42 @@ module game2048(
 	
 	assign reset_boxes = start | reset;
 	
-	clockdelay2 c2(reset, CLOCK_50, clock);
-	//assign clock = CLOCK_50;
+	assign LEDR[9] = (q == 25'b0000000000000000000000000);
 	
-	keyboardctrl k0(reset, CLOCK_50, countdown);
+	clockdelay2 c2(reset, CLOCK_50, clock);
+	
+	
+	//keyboardctrl k0(reset, CLOCK_50, countdown);
 
 	// TODO: Assign keyboard values to direction
+	/*
 	always@(posedge clock)
 	begin
 	if (countdown == 0)
 		direction <= ~KEY[3:0];
-	/*if (countdown == 0 || countdown == 1) // <- second option if one clock cycle doesn't work
-		direction <= ~KEY[3:0];*/
+	if (countdown == 25'b0000000000000000000000000 ) // <- second option if one clock cycle doesn't work
+		direction <= ~KEY[3:0];
 	else
 		direction <= 4'b0000; // direction only lasts one clock cycle (maybe too short? states in control change every 2 clock cycles)
-	end
-	
+	end */
+	reg 	[24:0] 	q;
+	/*always @(posedge CLOCK_50, posedge reset) 
+		begin
+		if(reset)
+			q <= 25'b1011111010111100000111111; 
+		else if(q == 25'b0000000000000000000000000) 
+			begin
+			q <= 25'b1011111010111100000111111; // resets every half second
+			direction <= ~KEY[3:0]; 
+			end
+		else 
+			begin
+			q <= q - 25'b0000000000000000000000001;
+			direction <= 4'b0000; 
+			end
+		end
+	*/
+	assign direction = ~KEY[3:0]; 
 	
 	// start or reset reset boxes
 	box	b1(box1in, enable, reset_boxes, clock, box1out);
@@ -154,7 +174,7 @@ module hex_decoder(hex_digit, segments);
         endcase
 endmodule
 
-
+/*
 module clockdelay2(reset, clock, clk);
 	input clock, reset;
 	output reg clk;
@@ -164,6 +184,7 @@ module clockdelay2(reset, clock, clk);
 		begin
 		if(reset)
 			q <= 14'b00000000000000;
+			
 		else if(q == 14'b11111111111111)
 			q <= 14'b00000000000000;
 		else q <= q + 1'b1;
@@ -174,7 +195,29 @@ module clockdelay2(reset, clock, clk);
 		clk <= (q == 14'b11111111111111)? 1'b1: 1'b0;
     end
 endmodule
+*/
 
+
+module clockdelay2(reset, clock, clk);
+	input clock, reset;
+	output reg clk;
+	reg 	[24:0] 	q;
+	
+	always @(posedge clock) 
+		begin
+		if(reset)
+			q <= 25'b0000000000000000000000000;
+			
+		else if(q == 25'b1111111111111111111111111)
+			q <= 25'b0000000000000000000000000;
+		else q <= q + 25'b0000000000000000000000001;
+		end
+   
+    always@(*)
+    begin
+		clk <= (q == 25'b1111111111111111111111111)? 1'b1: 1'b0;
+    end
+endmodule
 
 module keyboardctrl(reset, clock, q);
 	input clock, reset;
@@ -183,9 +226,9 @@ module keyboardctrl(reset, clock, q);
 	always @(posedge clock, posedge reset) 
 		begin
 		if(reset)
-			q <= 25'd24999999; 
-		else if(q == 0)
-			q <= 25'd24999999; // resets every half second
-		else q <= q - 1'b1;
+			q <= 25'b1011111010111100000111111; 
+		else if(q == 25'b0000000000000000000000000)
+			q <= 25'b1011111010111100000111111; // resets every half second
+		else q <= q - 25'b0000000000000000000000001;
 		end
 endmodule
