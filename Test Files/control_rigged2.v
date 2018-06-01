@@ -131,156 +131,61 @@ module control(reset, start, clock, direction, oldvalues, update, newvalues, end
 					begin
 					enable_givenum <= 1'b1;
 					enable_move <= 1'b0;
-					box1in <= 4'b0000;
-					box2in <= 4'b0000;
-					box3in <= 4'b0000;
-					box4in <= 4'b0000;
-					box5in <= 4'b0001;
-					box6in <= 4'b0000;
-					box7in <= 4'b0001;
-					box8in <= 4'b0000;
-					box9in <= 4'b0000;
-					box10in <= 4'b0000;
-					box11in <= 4'b0000;
-					box12in <= 4'b0000;
-					box13in <= 4'b0000;
-					box14in <= 4'b0000;
-					box15in <= 4'b0000;
-					box16in <= 4'b0000;
+				box1in <= 4'b0101;
+				box2in <= 4'b0100;
+				box3in <= 4'b0101;
+				box4in <= 4'b0100;
+				box5in <= 4'b0100;
+				box6in <= 4'b0101;
+				box7in <= 4'b0100;
+				box8in <= 4'b0001;
+				box9in <= 4'b0101;
+				box10in <= 4'b0100;
+				box11in <= 4'b0101;
+				box12in <= 4'b0100;
+				box13in <= 4'b0100;
+				box14in <= 4'b0101;
+				box15in <= 4'b0001;
+				box16in <= 4'b1001;
 
 					end
 				else if (random1 > 4'b1100)
 					begin
-					box1in <= 4'b0000;
-					box2in <= 4'b0000;
-					box3in <= 4'b0000;
-					box4in <= 4'b0000;
-					box5in <= 4'b0001;
-					box6in <= 4'b0000;
-					box7in <= 4'b0000;
-					box8in <= 4'b0000;
-					box9in <= 4'b0000;
-					box10in <= 4'b0000;
-					box11in <= 4'b0000;
-					box12in <= 4'b0000;
-					box13in <= 4'b0000;
-					box14in <= 4'b0000;
-					box15in <= 4'b0001;
-					box16in <= 4'b0000;
-					end
-				else if (random1 > 4'b1010)
-					begin
-					box1in <= 4'b0000;
-					box2in <= 4'b0000;
-					box3in <= 4'b0000;
-					box4in <= 4'b0000;
-					box5in <= 4'b0000;
-					box6in <= 4'b0000;
-					box7in <= 4'b0000;
-					box8in <= 4'b0001;
-					box9in <= 4'b0000;
-					box10in <= 4'b0000;
-					box11in <= 4'b0000;
-					box12in <= 4'b0000;
-					box13in <= 4'b0000;
-					box14in <= 4'b0001;
-					box15in <= 4'b0000;
-					box16in <= 4'b0000;
-					end
-				else if (random1 > 4'b1000)
-					begin
-					box1in <= 4'b0001;
-					box2in <= 4'b0000;
-					box3in <= 4'b0000;
-					box4in <= 4'b0000;
-					box5in <= 4'b0000;
-					box6in <= 4'b0000;
-					box7in <= 4'b0000;
-					box8in <= 4'b0000;
-					box9in <= 4'b0000;
-					box10in <= 4'b0000;
-					box11in <= 4'b0000;
-					box12in <= 4'b0000;
-					box13in <= 4'b0000;
-					box14in <= 4'b0000;
-					box15in <= 4'b0000;
-					box16in <= 4'b0001;
-					end
-				else if (random1 > 4'b0110)
-					begin
-					box1in <= 4'b0001;
-					box2in <= 4'b0000;
-					box3in <= 4'b0000;
-					box4in <= 4'b0000;
-					box5in <= 4'b0000;
-					box6in <= 4'b0000;
-					box7in <= 4'b0000;
-					box8in <= 4'b0000;
-					box9in <= 4'b0000;
-					box10in <= 4'b0000;
-					box11in <= 4'b0000;
-					box12in <= 4'b0000;
-					box13in <= 4'b0000;
-					box14in <= 4'b0000;
-					box15in <= 4'b0000;
-					box16in <= 4'b0001;
-					end
-				else if (random1 > 4'b0100)
-					begin
-					box1in <= 4'b0000;
-					box2in <= 4'b0000;
-					box3in <= 4'b0000;
-					box4in <= 4'b0000;
-					box5in <= 4'b0000;
-					box6in <= 4'b0000;
-					box7in <= 4'b0000;
-					box8in <= 4'b0000;
-					box9in <= 4'b0001;
-					box10in <= 4'b0000;
-					box11in <= 4'b0000;
-					box12in <= 4'b0001;
-					box13in <= 4'b0000;
-					box14in <= 4'b0000;
-					box15in <= 4'b0000;
-					box16in <= 4'b0000;
-					end
-				else if (random1 > 4'b0010)
-					begin
-					box1in <= 4'b0000;
-					box2in <= 4'b0001;
-					box3in <= 4'b0000;
-					box4in <= 4'b0001;
-					box5in <= 4'b0000;
-					box6in <= 4'b0000;
-					box7in <= 4'b0000;
-					box8in <= 4'b0000;
-					box9in <= 4'b0000;
-					box10in <= 4'b0000;
-					box11in <= 4'b0000;
-					box12in <= 4'b0000;
-					box13in <= 4'b0000;
-					box14in <= 4'b0000;
-					box15in <= 4'b0000;
-					box16in <= 4'b0000;
+					box1in <= 4'b0101;
+				box2in <= 4'b0100;
+				box3in <= 4'b0101;
+				box4in <= 4'b0100;
+				box5in <= 4'b0100;
+				box6in <= 4'b0101;
+				box7in <= 4'b0100;
+				box8in <= 4'b0001;
+				box9in <= 4'b0101;
+				box10in <= 4'b0100;
+				box11in <= 4'b0101;
+				box12in <= 4'b0100;
+				box13in <= 4'b0100;
+				box14in <= 4'b0101;
+				box15in <= 4'b0000;
+				box16in <= 4'b1001;
 					end
 				else
 					begin
-					box1in <= 4'b0000;
-					box2in <= 4'b0000;
-					box3in <= 4'b0000;
-					box4in <= 4'b0000;
-					box5in <= 4'b0000;
-					box6in <= 4'b0000;
-					box7in <= 4'b0000;
-					box8in <= 4'b0001;
-					box9in <= 4'b0000;
-					box10in <= 4'b0001;
-					box11in <= 4'b0000;
-					box12in <= 4'b0000;
-					box13in <= 4'b0000;
-					box14in <= 4'b0000;
-					box15in <= 4'b0000;
-					box16in <= 4'b0000;
+				box1in <= 4'b0101;
+				box2in <= 4'b0100;
+				box3in <= 4'b0101;
+				box4in <= 4'b0100;
+				box5in <= 4'b0100;
+				box6in <= 4'b0101;
+				box7in <= 4'b0100;
+				box8in <= 4'b0001;
+				box9in <= 4'b0101;
+				box10in <= 4'b0100;
+				box11in <= 4'b0101;
+				box12in <= 4'b0100;
+				box13in <= 4'b0100;
+				box14in <= 4'b0101;
+				box15in <= 4'b0000;
+				box16in <= 4'b1001;
 					end
 					update_inside <= 1'b1;
 				end			

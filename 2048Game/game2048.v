@@ -13,7 +13,9 @@ module game2048(
 		VGA_SYNC_N,						//	VGA SYNC
 		VGA_R,   						//	VGA Red[9:0]
 		VGA_G,	 						//	VGA Green[9:0]
-		VGA_B   						//	VGA Blue[9:0]	
+		VGA_B,   						//	VGA Blue[9:0]	
+		PS2_DAT,
+		PS2_CLK
 		);
 	//input: arrow keys, s key (start)
 	input			CLOCK_50;				//	50 MHz
@@ -72,8 +74,8 @@ module game2048(
 	wire [2:0] state, n_state;
 	
 	// TODO: Assign keyboard to start
-	assign start = SW[0];
-	assign reset = SW[1];
+	//assign start = SW[0];
+	//assign reset = SW[1];
 	
 	assign reset_boxes = start | reset;
 	
@@ -82,37 +84,13 @@ module game2048(
 	clockdelay2 c2(reset, CLOCK_50, clock);
 	
 	
-	//keyboardctrl k0(reset, CLOCK_50, countdown);
 
-	// TODO: Assign keyboard values to direction
-	/*
-	always@(posedge clock)
-	begin
-	if (countdown == 0)
-		direction <= ~KEY[3:0];
-	if (countdown == 25'b0000000000000000000000000 ) // <- second option if one clock cycle doesn't work
-		direction <= ~KEY[3:0];
-	else
-		direction <= 4'b0000; // direction only lasts one clock cycle (maybe too short? states in control change every 2 clock cycles)
-	end */
 	reg 	[24:0] 	q;
-	/*always @(posedge CLOCK_50, posedge reset) 
-		begin
-		if(reset)
-			q <= 25'b1011111010111100000111111; 
-		else if(q == 25'b0000000000000000000000000) 
-			begin
-			q <= 25'b1011111010111100000111111; // resets every half second
-			direction <= ~KEY[3:0]; 
-			end
-		else 
-			begin
-			q <= q - 25'b0000000000000000000000001;
-			direction <= 4'b0000; 
-			end
-		end
-	*/
-	assign direction = ~KEY[3:0]; 
+
+	inout PS2_CLK;
+	inout PS2_DAT;
+	keyboard_me k(CLOCK_50, SW[1:0] ,PS2_CLK, PS2_DAT, direction, reset, start);
+	//assign direction = ~KEY[3:0]; 
 	
 	// start or reset reset boxes
 	box	b1(box1in, enable, reset_boxes, clock, box1out);
@@ -146,7 +124,7 @@ module game2048(
 	hex_decoder h1({1'b0,n_state}, HEX1);
 endmodule
 
-
+/*
 
 module hex_decoder(hex_digit, segments);
     input [3:0] hex_digit;
@@ -173,7 +151,7 @@ module hex_decoder(hex_digit, segments);
             default: segments = 7'h7f;
         endcase
 endmodule
-
+*/
 /*
 module clockdelay2(reset, clock, clk);
 	input clock, reset;
@@ -201,21 +179,21 @@ endmodule
 module clockdelay2(reset, clock, clk);
 	input clock, reset;
 	output reg clk;
-	reg 	[24:0] 	q;
+	reg 	[23:0] 	q;
 	
 	always @(posedge clock) 
 		begin
 		if(reset)
-			q <= 25'b0000000000000000000000000;
+			q <= 24'b000000000000000000000000;
 			
-		else if(q == 25'b1111111111111111111111111)
-			q <= 25'b0000000000000000000000000;
-		else q <= q + 25'b0000000000000000000000001;
+		else if(q == 24'b111111111111111111111111)
+			q <= 24'b000000000000000000000000;
+		else q <= q + 24'b000000000000000000000001;
 		end
    
     always@(*)
     begin
-		clk <= (q == 25'b1111111111111111111111111)? 1'b1: 1'b0;
+		clk <= (q == 24'b111111111111111111111111)? 1'b1: 1'b0;
     end
 endmodule
 

@@ -7,8 +7,6 @@ module control(reset, start, clock, direction, oldvalues, update, newvalues, end
 	output reg [1:0] endstatus; // 00: in game, 01: lose, 10: win
 	reg [3:0]  box1in, box2in, box3in, box4in, box5in, box6in, box7in, box8in, 
 				box9in, box10in, box11in, box12in, box13in, box14in, box15in, box16in;
-	wire [3:0]  box1_firin, box2_firin, box3_firin, box4_firin, box5_firin, box6_firin, box7_firin, box8_firin, 
-				box9_firin, box10_firin, box11_firin, box12_firin, box13_firin, box14_firin, box15_firin, box16_firin;
 	wire [3:0]  box_move1in, box_move2in, box_move3in, box_move4in, box_move5in, box_move6in, box_move7in, box_move8in, 
 				box_move9in, box_move10in, box_move11in, box_move12in, box_move13in, box_move14in, box_move15in, box_move16in; 
 	wire [3:0] box1out, box2out, box3out, box4out, box5out, box6out, box7out, box8out, box9out, 
@@ -18,8 +16,11 @@ module control(reset, start, clock, direction, oldvalues, update, newvalues, end
 	reg update_inside;
 	wire [3:0] random1;
 	reg [1:0] direction_bi;
+	wire dir;
+	assign dir = |direction;
+
 	
-	always@(*)
+	always@(posedge clock)
 	begin
 		case(direction)
 			4'b0001: //0001 <=
@@ -60,70 +61,229 @@ module control(reset, start, clock, direction, oldvalues, update, newvalues, end
 	
 	output reg [2:0] current_state, next_state; // temporary output
 	
-	localparam  INIT = 3'b101,
+	localparam  		INIT = 3'b101,
 				INIT2 = 3'b001, 
 				WAIT = 3'b011,
 				MOVE = 3'b010,
-				END = 3'b000;
-	
+				END = 3'b000;	
+
 	always@(*) // update next state
 	begin
-		case(current_state)
-			INIT: next_state = INIT2;
-			INIT2: next_state = start? INIT2: WAIT;
+		casex(current_state)
+			INIT: begin next_state = INIT2; end
+			INIT2: begin next_state = start? INIT2: WAIT; end
 			WAIT: 
 			begin
 			if(start)
 				next_state = INIT2;
 			else if(endstatus != 2'b00)
 				next_state = END;
+			else if(direction != 4'b0000) 
+				next_state = MOVE;
 			else
 				next_state = WAIT;
 			end
-			MOVE: next_state = WAIT;
-			END: next_state = start? INIT: END;
-			default: next_state = INIT;
+			MOVE: begin next_state = WAIT; end
+			END: begin next_state = start? INIT: END; end
+			//default: next_state = INIT;
 		endcase
 		
-		@(posedge |direction)
-		begin
-		if(current_state == WAIT)
-			next_state = MOVE;
-		end
 	end
+
+/*	always@(posedge dir) begin
+			if(current_state == WAIT)	
+				next_state = MOVE; 
+		end
+		*/
+
 	
-	always@(posedge clock) // current state operation signals
+	always@(*) // current state operation signals
 	begin
 		update_inside <= 1'b0;
-		//enable_givenum <= 1'b0;
+		enable_givenum <= 1'b0;
 		enable_move <= 1'b0;
 		case(current_state)
 			INIT:
 				begin
-				enable_givenum <= enable_givenum? 1'b0: 1'b1;
+				if(reset | start) begin enable_givenum <= 1'b1; end
+				else begin enable_givenum <= 1'b0; end
+				box1in <= 4'b0000;
+				box2in <= 4'b0000;
+				box3in <= 4'b0000;
+				box4in <= 4'b0000;
+				box5in <= 4'b0000;
+				box6in <= 4'b0000;
+				box7in <= 4'b0000;
+				box8in <= 4'b0000;
+				box9in <= 4'b0000;
+				box10in <= 4'b0000;
+				box11in <= 4'b0000;
+				box12in <= 4'b0000;
+				box13in <= 4'b0000;
+				box14in <= 4'b0000;
+				box15in <= 4'b0000;
+				box16in <= 4'b0000;
+				update_inside <= 1'b1;
 				end
 			INIT2: 
 				begin
-				enable_givenum <= 1'b0;
-				enable_move <= 1'b0;
-				box1in <= box1_firin;
-				box2in <= box2_firin;
-				box3in <= box3_firin;
-				box4in <= box4_firin;
-				box5in <= box5_firin;
-				box6in <= box6_firin;
-				box7in <= box7_firin;
-				box8in <= box8_firin;
-				box9in <= box9_firin;
-				box10in <= box10_firin;
-				box11in <= box11_firin;
-				box12in <= box12_firin;
-				box13in <= box13_firin;
-				box14in <= box14_firin;
-				box15in <= box15_firin;
-				box16in <= box16_firin;
-				update_inside <= 1'b1;
-				end
+				if (random1==4'b0000)
+					begin
+					enable_givenum <= 1'b1;
+					enable_move <= 1'b0;
+					box1in <= 4'b0000;
+					box2in <= 4'b0000;
+					box3in <= 4'b0000;
+					box4in <= 4'b0000;
+					box5in <= 4'b1010;
+					box6in <= 4'b0000;
+					box7in <= 4'b1010;
+					box8in <= 4'b0000;
+					box9in <= 4'b0000;
+					box10in <= 4'b0000;
+					box11in <= 4'b0000;
+					box12in <= 4'b0000;
+					box13in <= 4'b0000;
+					box14in <= 4'b0000;
+					box15in <= 4'b0000;
+					box16in <= 4'b0000;
+
+					end
+				else if (random1 > 4'b1100)
+					begin
+					box1in <= 4'b0000;
+					box2in <= 4'b0000;
+					box3in <= 4'b0000;
+					box4in <= 4'b0000;
+					box5in <= 4'b1010;
+					box6in <= 4'b0000;
+					box7in <= 4'b0000;
+					box8in <= 4'b0000;
+					box9in <= 4'b0000;
+					box10in <= 4'b0000;
+					box11in <= 4'b0000;
+					box12in <= 4'b0000;
+					box13in <= 4'b0000;
+					box14in <= 4'b0000;
+					box15in <= 4'b1010;
+					box16in <= 4'b0000;
+					end
+				else if (random1 > 4'b1010)
+					begin
+					box1in <= 4'b0000;
+					box2in <= 4'b0000;
+					box3in <= 4'b0000;
+					box4in <= 4'b0000;
+					box5in <= 4'b0000;
+					box6in <= 4'b0000;
+					box7in <= 4'b0000;
+					box8in <= 4'b1010;
+					box9in <= 4'b0000;
+					box10in <= 4'b0000;
+					box11in <= 4'b0000;
+					box12in <= 4'b0000;
+					box13in <= 4'b0000;
+					box14in <= 4'b1010;
+					box15in <= 4'b0000;
+					box16in <= 4'b0000;
+					end
+				else if (random1 > 4'b1000)
+					begin
+					box1in <= 4'b1010;
+					box2in <= 4'b0000;
+					box3in <= 4'b0000;
+					box4in <= 4'b0000;
+					box5in <= 4'b0000;
+					box6in <= 4'b0000;
+					box7in <= 4'b0000;
+					box8in <= 4'b0000;
+					box9in <= 4'b0000;
+					box10in <= 4'b0000;
+					box11in <= 4'b0000;
+					box12in <= 4'b0000;
+					box13in <= 4'b0000;
+					box14in <= 4'b0000;
+					box15in <= 4'b0000;
+					box16in <= 4'b1010;
+					end
+				else if (random1 > 4'b0110)
+					begin
+					box1in <= 4'b1010;
+					box2in <= 4'b0000;
+					box3in <= 4'b0000;
+					box4in <= 4'b0000;
+					box5in <= 4'b0000;
+					box6in <= 4'b0000;
+					box7in <= 4'b0000;
+					box8in <= 4'b0000;
+					box9in <= 4'b0000;
+					box10in <= 4'b0000;
+					box11in <= 4'b0000;
+					box12in <= 4'b0000;
+					box13in <= 4'b0000;
+					box14in <= 4'b0000;
+					box15in <= 4'b0000;
+					box16in <= 4'b1010;
+					end
+				else if (random1 > 4'b0100)
+					begin
+					box1in <= 4'b0000;
+					box2in <= 4'b0000;
+					box3in <= 4'b0000;
+					box4in <= 4'b0000;
+					box5in <= 4'b0000;
+					box6in <= 4'b0000;
+					box7in <= 4'b0000;
+					box8in <= 4'b0000;
+					box9in <= 4'b1010;
+					box10in <= 4'b0000;
+					box11in <= 4'b0000;
+					box12in <= 4'b1010;
+					box13in <= 4'b0000;
+					box14in <= 4'b0000;
+					box15in <= 4'b0000;
+					box16in <= 4'b0000;
+					end
+				else if (random1 > 4'b0010)
+					begin
+					box1in <= 4'b0000;
+					box2in <= 4'b1010;
+					box3in <= 4'b0000;
+					box4in <= 4'b1010;
+					box5in <= 4'b0000;
+					box6in <= 4'b0000;
+					box7in <= 4'b0000;
+					box8in <= 4'b0000;
+					box9in <= 4'b0000;
+					box10in <= 4'b0000;
+					box11in <= 4'b0000;
+					box12in <= 4'b0000;
+					box13in <= 4'b0000;
+					box14in <= 4'b0000;
+					box15in <= 4'b0000;
+					box16in <= 4'b0000;
+					end
+				else
+					begin
+					box1in <= 4'b0000;
+					box2in <= 4'b0000;
+					box3in <= 4'b0000;
+					box4in <= 4'b0000;
+					box5in <= 4'b0000;
+					box6in <= 4'b0000;
+					box7in <= 4'b0000;
+					box8in <= 4'b1010;
+					box9in <= 4'b0000;
+					box10in <= 4'b1010;
+					box11in <= 4'b0000;
+					box12in <= 4'b0000;
+					box13in <= 4'b0000;
+					box14in <= 4'b0000;
+					box15in <= 4'b0000;
+					box16in <= 4'b0000;
+					end
+					update_inside <= 1'b1;
+				end			
 			WAIT:
 				begin
 				enable_givenum <= 1'b0;
@@ -173,10 +333,11 @@ module control(reset, start, clock, direction, oldvalues, update, newvalues, end
 	assign update = update_inside;
 	
 	clockdelay c1(clock, ~reset, 1'b1, clk);
+	//assign clk = clock;
 	
 	// Update current state
-	always@(posedge clk)
-    begin
+	always@(posedge clock)
+	begin
         if(start | reset)
 			begin
             current_state <= INIT;
@@ -185,7 +346,7 @@ module control(reset, start, clock, direction, oldvalues, update, newvalues, end
 			begin
             current_state <= next_state;
 			end
-    end
+	end
 	
 	always@(*) // check for win/lose
 	begin 
@@ -206,10 +367,6 @@ module control(reset, start, clock, direction, oldvalues, update, newvalues, end
 	move mo(box1out, box2out, box3out, box4out, box5out, box6out, box7out, box8out, box9out, 
 					box10out, box11out, box12out, box13out, box14out, box15out, box16out, box_move1in, box_move2in, box_move3in, box_move4in, box_move5in, box_move6in, box_move7in, 
 					box_move8in, box_move9in, box_move10in, box_move11in, box_move12in, box_move13in, box_move14in, box_move15in, box_move16in, clock, direction_bi, enable_move, random1);
-					
-	first_placement fargy1(box1out, box2out, box3out, box4out, box5out, box6out, box7out, box8out, box9out, 
-					box10out, box11out, box12out, box13out, box14out, box15out, box16out, box1_firin, box2_firin, box3_firin, box4_firin, box5_firin, box6_firin, box7_firin, 
-					box8_firin, box9_firin, box10_firin, box11_firin, box12_firin, box13_firin, box14_firin, box15_firin, box16_firin,clock, enable_givenum, random1);
 
 endmodule
 
@@ -217,15 +374,15 @@ endmodule
 module clockdelay(clock, reset_n, enable, clk);
 	input clock, reset_n, enable;
 	output reg clk;
-	reg 	[2:0] 	q;
+	reg  	q;
 	
 	always @(posedge clock) begin
 		if(reset_n == 1'b0)
-			q <= 3'b000;
+			q <= 0;
 		else if (enable == 1'b1)
 		begin
-		  if (q == 3'b111)
-			  q <= 3'b000;
+		  if (q == 1)
+			  q <= 0;
 		  else
 			  q <= q + 1'b1;
 		end
@@ -233,6 +390,7 @@ module clockdelay(clock, reset_n, enable, clk);
    
     always@(*)
     begin
-		clk <= (q == 3'b111)? 1'b1: 1'b0;
+		clk <= (q == 1)? 1'b1: 1'b0;
     end
 endmodule
+
